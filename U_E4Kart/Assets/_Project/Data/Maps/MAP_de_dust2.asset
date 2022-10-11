@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7a68705f032b0409178f69b21575f7, type: 3}
+  m_Name: MAP_de_dust2
+  m_EditorClassIdentifier: 
+  mapName: de_dust2
+  mapIcon: {fileID: 21300000, guid: 4f86397964a9c3448abe00d46c0eee95, type: 3}
+  gameMapPrefab: {fileID: 3330208293942306882, guid: 6c6e583558bba234390f2c3e655de8a2,
+    type: 3}
