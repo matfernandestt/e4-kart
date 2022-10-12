@@ -212,9 +212,6 @@ public class LobbyManager : PunBehaviour
         if (PhotonNetwork.player.GetTeam() == PunTeams.Team.none)
         {
             var match = MatchInstance.CurrentMatch;
-            PhotonNetwork.player.SetTeam(match.playersInTeamB < match.playersInTeamA
-                ? PunTeams.Team.red
-                : PunTeams.Team.blue);
         }
         
         PlayerData.SetCustomProperty(PhotonNetwork.player, "isRoomLeader", MatchInstance.CurrentMatch.playerIsLeader);

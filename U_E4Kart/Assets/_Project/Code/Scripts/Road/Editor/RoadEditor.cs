@@ -13,6 +13,7 @@ public class RoadEditor : Editor
         if (GUILayout.Button("Refresh Collisions"))
         {
             parent.RefreshCollision();
+            EditorUtility.SetDirty(parent);
         }
     }
 }

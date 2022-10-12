@@ -1,23 +1,35 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SelectableAgentBase : MonoBehaviour
 {
-    [FormerlySerializedAs("agentData")] [SerializeField] private CharacterData characterData;
+    [SerializeField] private CharacterData characterData;
     [Space]
-    [SerializeField] private Button selfButton;
+    [SerializeField] private Toggle selfButton;
     [SerializeField] private Image agentIcon;
+
+    private CharacterSelection parent;
 
     private void Awake()
     {
+        parent = GetComponentInParent<CharacterSelection>(true);
+        
         agentIcon.sprite = characterData.characterIcon;
-        selfButton.onClick.AddListener(OnSelectAgent);
+        selfButton.onValueChanged.AddListener(OnSelectAgent);
     }
 
-    private void OnSelectAgent()
+    private void OnSelectAgent(bool value)
     {
-        AgentSelection.onLocalPlayerSelectAgent?.Invoke(characterData);
+        if (!value) return;
+        parent.DisableAll(gameObject);
+        
+        CharacterSelection.onLocalPlayerSelectAgent?.Invoke(characterData);
+        selfButton.interactable = false;
+    }
+
+    public void DisableToggle()
+    {
+        selfButton.isOn = false;
+        selfButton.interactable = true;
     }
 }

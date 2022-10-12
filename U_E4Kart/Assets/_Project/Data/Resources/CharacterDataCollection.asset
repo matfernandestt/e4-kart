@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: CharacterDataCollection
   m_EditorClassIdentifier: 
   gameAgents:
+  - {fileID: 11400000, guid: ef92a4b1b24b0ab4cbd0d75e6146a120, type: 2}
+  - {fileID: 11400000, guid: 0a5c2ead9c8f47c4d9521337d7320b6e, type: 2}
+  - {fileID: 11400000, guid: 4a9d14d9d3200974f880463d5324ecb3, type: 2}
+  - {fileID: 11400000, guid: bb3ce08758702b846a05755b6c9d3791, type: 2}
   - {fileID: 11400000, guid: 61678e0d63279d4409ffc393b9c7b6e8, type: 2}

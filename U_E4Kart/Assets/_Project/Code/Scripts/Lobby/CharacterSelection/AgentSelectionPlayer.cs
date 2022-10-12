@@ -9,6 +9,7 @@ public class AgentSelectionPlayer : MonoBehaviour
     [SerializeField] private Image agentIcon;
     [SerializeField] private TextMeshProUGUI playerName;
     [SerializeField] private TextMeshProUGUI agentName;
+    [SerializeField] private GameObject isThisPlayerYou;
 
     public void Setup(string player, CharacterData character)
     {
@@ -16,6 +17,11 @@ public class AgentSelectionPlayer : MonoBehaviour
         SetAgent(character);
 
         canvasGroup.alpha = 1;
+    }
+
+    public void SetLocalPlayer()
+    {
+        isThisPlayerYou.SetActive(true);
     }
 
     public void SetNoPlayer()

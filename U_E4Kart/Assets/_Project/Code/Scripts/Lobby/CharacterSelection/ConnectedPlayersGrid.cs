@@ -1,9 +1,8 @@
 using System.Linq;
 using UnityEngine;
 
-public class TeamGrid : MonoBehaviour
+public class ConnectedPlayersGrid : MonoBehaviour
 {
-    [SerializeField] private PunTeams.Team team;
     [SerializeField] private AgentSelectionPlayer[] players;
 
     private void Awake()
@@ -16,10 +15,10 @@ public class TeamGrid : MonoBehaviour
         foreach (var player in players) { player.SetNoPlayer(); }
         
         var connectedPlayers = PhotonNetwork.playerList;
-        var thisTeamPlayers = connectedPlayers.Where(player => player.GetTeam() == team).ToList();
-        for (var i = 0; i < thisTeamPlayers.Count; i++)
+        var playerList = connectedPlayers.ToList();
+        for (var i = 0; i < playerList.Count; i++)
         {
-            var p = thisTeamPlayers[i];
+            var p = playerList[i];
             if (i < players.Length)
             {
                 var agentId = PlayerData.GetCustomProperty(p, "selectedAgent");
@@ -29,8 +28,11 @@ public class TeamGrid : MonoBehaviour
                     players[i].Setup(p.NickName, agent);
                 }
 
-                if(p == PhotonNetwork.player)
-                    AgentSelection.onSpawnLocalAgentSelectionPlayer?.Invoke(players[i]);
+                if (p == PhotonNetwork.player)
+                {
+                    players[i].SetLocalPlayer();
+                    CharacterSelection.onSpawnLocalAgentSelectionPlayer?.Invoke(players[i]);
+                }
             }
         }
     }

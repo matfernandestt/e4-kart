@@ -3,26 +3,31 @@ using System.Collections;
 using Photon;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class AgentSelection : PunBehaviour
+public class CharacterSelection : PunBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private Button confirmAgentButton;
     [SerializeField] private GameObject agentSelectionBlocker;
 
-    [SerializeField] private TeamGrid teamAGrid;
-    [SerializeField] private TeamGrid teamBGrid;
+    [SerializeField] private ConnectedPlayersGrid connectedPlayersGrid;
+
+    private SelectableAgentBase[] selectableAgents;
 
     private Coroutine agentSelectionCoroutine;
     private WaitForSeconds oneSecond = new WaitForSeconds(1f);
     private AgentSelectionPlayer agentSelectionPlayer;
+    private CharacterData localSelectedCharacter;
 
     public static Action<AgentSelectionPlayer> onSpawnLocalAgentSelectionPlayer;
     public static Action<CharacterData> onLocalPlayerSelectAgent;
 
     private void Awake()
     {
+        selectableAgents = GetComponentsInChildren<SelectableAgentBase>(true);
+        
         onSpawnLocalAgentSelectionPlayer += SetLocalAgentSelectionPlayer;
         onLocalPlayerSelectAgent += LocalPlayerSelectedAgent;
         
@@ -38,8 +43,7 @@ public class AgentSelection : PunBehaviour
     [PunRPC]
     public void UpdatePlayers()
     {
-        teamAGrid.SetPlayers();
-        teamBGrid.SetPlayers();
+        connectedPlayersGrid.SetPlayers();
     }
 
     public void InitialState()
@@ -48,27 +52,9 @@ public class AgentSelection : PunBehaviour
         agentSelectionBlocker.SetActive(false);
     }
 
-    public void StartAgentSelection()
+    public void StartCharacterSelection()
     {
         UpdatePlayers();
-        
-        var currentTime = GlobalSettingsData.Instance.agentSelectionTime;
-        
-        if(agentSelectionCoroutine != null)
-            StopCoroutine(agentSelectionCoroutine);
-        agentSelectionCoroutine = StartCoroutine(UpdateTimer());
-
-        IEnumerator UpdateTimer()
-        {
-            timerText.text = currentTime.ToString();
-            while (currentTime > 0)
-            {
-                yield return oneSecond;
-                currentTime--;
-                timerText.text = currentTime.ToString();
-            }
-            MatchInstance.CurrentMatch.onStartMatch?.Invoke();
-        }
     }
 
     private void SetLocalAgentSelectionPlayer(AgentSelectionPlayer localPlayer)
@@ -79,14 +65,28 @@ public class AgentSelection : PunBehaviour
     private void LocalPlayerSelectedAgent(CharacterData characterData)
     {
         agentSelectionPlayer.SetAgent(characterData);
-        PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", CharacterDataCollection.GetAgentId(characterData));
+        localSelectedCharacter = characterData;
     }
 
     private void OnConfirmAgent()
     {
         confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(true);
+        PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", CharacterDataCollection.GetAgentId(localSelectedCharacter));
 
         photonView.RPC("UpdatePlayers", PhotonTargets.All);
+        
+        
+        //THIS WILL START THE MATCH
+        MatchInstance.CurrentMatch.onStartMatch?.Invoke();
+    }
+
+    public void DisableAll(GameObject current)
+    {
+        foreach (var selectableAgent in selectableAgents)
+        {
+            if(selectableAgent.gameObject != current)
+                selectableAgent.DisableToggle();
+        }
     }
 }

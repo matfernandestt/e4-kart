@@ -13,6 +13,7 @@ public class BaseKart : MonoBehaviour
     public bool isBraking;
 
     public float speed;
+    public float maxSpeed;
     
     private Rigidbody thisRigidbody;
 
@@ -94,7 +95,7 @@ public class BaseKart : MonoBehaviour
         {
             if (isAccelerating && !isBraking)
             {
-                if (thisRigidbody.velocity.magnitude < 30f)
+                if (thisRigidbody.velocity.magnitude < maxSpeed)
                 {
                     momentumDirection = Vector3.Lerp(momentumDirection, subKart.transform.forward, Time.deltaTime);
                     thisRigidbody.velocity = momentumDirection * Time.deltaTime * speed;
