@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentSelectionTime: 5
   localPlayerData: {fileID: 11400000, guid: 46c1be56885afe9498f8d6292afebd9c, type: 2}
-  agentBaseMovementSpeed: 6
   mouseSensitivity: 25
-  chosenMap: {fileID: 11400000, guid: d789c068eb997924285386bfe34cb8f9, type: 2}
+  cameraPositionOffset: {x: 0, y: 0, z: 0}
+  cameraRotationOffset: {x: 0, y: 0, z: 0}
+  cameraFollowDelay: 10
