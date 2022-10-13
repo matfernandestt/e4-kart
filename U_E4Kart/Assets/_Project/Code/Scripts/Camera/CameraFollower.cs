@@ -9,6 +9,8 @@ public class CameraFollower : MonoBehaviour
 
     private void Awake()
     {
+        transform.parent = null;
+        
         globalRef = GlobalSettingsData.Instance;
     }
 

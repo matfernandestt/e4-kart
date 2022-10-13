@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterIcon: {fileID: 21300000, guid: c45b807ac44888541933adc6ab103772, type: 3}
   characterName: Felipe
+  characterPrefab: {fileID: 1811671160884499255, guid: 924c08b18ed16c448af96d4cb792725a,
+    type: 3}

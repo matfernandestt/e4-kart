@@ -8,16 +8,17 @@ using Vector3 = UnityEngine.Vector3;
 
 public class BaseKart : MonoBehaviour
 {
+    public BaseSubKart subKart;
+    
     public bool isGrounded;
     public bool isAccelerating;
     public bool isBraking;
 
     public float speed;
     public float maxSpeed;
-    
-    private Rigidbody thisRigidbody;
 
-    private BaseSubKart subKart;
+    private Rigidbody thisRigidbody;
+    
     private Quaternion normal;
     private Vector2 axisInput;
     private Vector3 momentumDirection;
@@ -27,26 +28,46 @@ public class BaseKart : MonoBehaviour
     private void Awake()
     {
         thisRigidbody = GetComponent<Rigidbody>();
-        subKart = GetComponentInChildren<BaseSubKart>();
         normal = transform.rotation;
 
         input = new InputMapping();
         input.Enable();
 
         input.Player.Accelerate.performed += StartAccelerating;
+        RaceController.onStartRace += OnStartRace;
 
         momentumDirection = Vector3.zero;
+
+        EnableMovement(false);
     }
 
     private void OnDestroy()
     {
         input.Player.Accelerate.performed -= StartAccelerating;
+        RaceController.onStartRace -= OnStartRace;
+    }
+
+    private void OnStartRace()
+    {
+        EnableMovement(true);
+    }
+
+    public void EnableMovement(bool enable)
+    {
+        if (thisRigidbody != null)
+        {
+            thisRigidbody.isKinematic = !enable;
+        }
+        else
+        {
+            GetComponent<Rigidbody>().isKinematic = !enable;
+        }
     }
 
     private void StartAccelerating(InputAction.CallbackContext context)
     {
-        momentumDirection = Vector3.zero;
-        thisRigidbody.velocity = momentumDirection;
+        momentumDirection /= 2;
+        //thisRigidbody.velocity = momentumDirection;
     }
 
     private void Update()
@@ -70,7 +91,7 @@ public class BaseKart : MonoBehaviour
             if (road != null)
             {
                 isGrounded = true;
-
+        
                 normal = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
                 transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
             }
@@ -104,7 +125,7 @@ public class BaseKart : MonoBehaviour
 
             if (isBraking)
             {
-                thisRigidbody.velocity /= 2f;
+                thisRigidbody.velocity = Vector3.Lerp(thisRigidbody.velocity, Vector3.zero, Time.deltaTime);
                 momentumDirection = Vector3.zero;
             }
         }

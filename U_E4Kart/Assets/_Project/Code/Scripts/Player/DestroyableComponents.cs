@@ -1,11 +1,17 @@
 using System;
+using Photon;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class DestroyableComponents : MonoBehaviour
+public class DestroyableComponents : PunBehaviour
 {
     public Component[] componentsToDestroy;
     public GameObject[] gameObjectsToDestroy;
+
+    private void Awake()
+    {
+        if(PhotonNetwork.connected)
+            DestroyComponents(photonView.isMine);
+    }
 
     public void DestroyComponents(bool isMine)
     {

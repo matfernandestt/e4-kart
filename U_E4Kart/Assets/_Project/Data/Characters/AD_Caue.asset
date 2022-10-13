@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterIcon: {fileID: 21300000, guid: 4b25c34e292610f48a50ebd99c9d87da, type: 3}
   characterName: "Cau\xEA"
+  characterPrefab: {fileID: 4616317164723325914, guid: ad9f479fc2e8384408a3bce597d06179,
+    type: 3}

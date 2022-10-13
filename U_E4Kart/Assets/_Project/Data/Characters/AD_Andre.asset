@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterIcon: {fileID: 21300000, guid: 71b07653957cc334d8d4944021651772, type: 3}
   characterName: "Andr\xE9"
+  characterPrefab: {fileID: 721104393243734299, guid: 9c3c06412f464844f82aa860a6b150b6,
+    type: 3}

@@ -8,16 +8,17 @@ using UnityEngine.UI;
 
 public class CharacterSelection : PunBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private Button confirmAgentButton;
+    [SerializeField] private TextMeshProUGUI confirmCharacterButtonText;
     [SerializeField] private GameObject agentSelectionBlocker;
 
     [SerializeField] private ConnectedPlayersGrid connectedPlayersGrid;
+    [SerializeField] private Timer startMatchTimer;
+    [SerializeField] private CharacterShowcase characterShowcase;
 
     private SelectableAgentBase[] selectableAgents;
 
     private Coroutine agentSelectionCoroutine;
-    private WaitForSeconds oneSecond = new WaitForSeconds(1f);
     private AgentSelectionPlayer agentSelectionPlayer;
     private CharacterData localSelectedCharacter;
 
@@ -32,6 +33,8 @@ public class CharacterSelection : PunBehaviour
         onLocalPlayerSelectAgent += LocalPlayerSelectedAgent;
         
         confirmAgentButton.onClick.AddListener(OnConfirmAgent);
+        
+        startMatchTimer.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -44,11 +47,14 @@ public class CharacterSelection : PunBehaviour
     public void UpdatePlayers()
     {
         connectedPlayersGrid.SetPlayers();
+        
+        CheckAllPlayersReady();
     }
 
     public void InitialState()
     {
-        confirmAgentButton.interactable = true;
+        confirmCharacterButtonText.text = "Select a character";
+        confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(false);
     }
 
@@ -64,21 +70,58 @@ public class CharacterSelection : PunBehaviour
 
     private void LocalPlayerSelectedAgent(CharacterData characterData)
     {
+        confirmCharacterButtonText.text = "Confirm character";
+        confirmAgentButton.interactable = true;
+        
         agentSelectionPlayer.SetAgent(characterData);
         localSelectedCharacter = characterData;
+        
+        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals);
     }
 
     private void OnConfirmAgent()
     {
+        confirmCharacterButtonText.text = "Waiting for match to start";
+        characterShowcase.EndShowcase();
         confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(true);
         PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", CharacterDataCollection.GetAgentId(localSelectedCharacter));
 
         photonView.RPC("UpdatePlayers", PhotonTargets.All);
+    }
+
+    private void CheckAllPlayersReady()
+    {
+        var playersReady = 0;
         
+        var players = PhotonNetwork.playerList;
+        foreach (var player in players)
+        {
+            var selectedAgent = (int) player.CustomProperties["selectedAgent"];
+            if (selectedAgent != null)
+            {
+                if (selectedAgent != 0)
+                    playersReady++;
+            }
+        }
         
-        //THIS WILL START THE MATCH
-        MatchInstance.CurrentMatch.onStartMatch?.Invoke();
+        if (playersReady == players.Length)
+        {
+            startMatchTimer.gameObject.SetActive(true);
+            startMatchTimer.Countdown(10, StartMatch);
+        }
+    }
+
+    private void StartMatch()
+    {
+        Transitioner.FadeIn();
+
+        StartCoroutine(WaitToStart());
+        IEnumerator WaitToStart()
+        {
+            yield return new WaitForSeconds(1f);
+            MatchInstance.CurrentMatch.onStartMatch?.Invoke();
+        }
     }
 
     public void DisableAll(GameObject current)

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded819b3b5a261541832f67826ce3906, type: 3}
+  m_Name: AD_Leonardo
+  m_EditorClassIdentifier: 
+  characterIcon: {fileID: 21300000, guid: fd56116447f4ca443a9b51b546633b12, type: 3}
+  characterName: Leonardo
+  characterPrefab: {fileID: 6302778147651824683, guid: 2b4fc088916aa114c89206f4ef9c3f9f,
+    type: 3}

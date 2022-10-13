@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterIcon: {fileID: 21300000, guid: 631b7c77893677841810ff453321afb2, type: 3}
   characterName: Mateus
+  characterPrefab: {fileID: 919838958998732070, guid: 84c2f13b895400b42b3a03d0e1e30f75,
+    type: 3}

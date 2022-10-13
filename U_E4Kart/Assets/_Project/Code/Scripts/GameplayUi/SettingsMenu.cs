@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -6,9 +7,11 @@ using UnityEngine.UI;
 public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private Toggle pingToggle;
+    [SerializeField] private Scoreboard scoreboard;
     
-    [SerializeField] private Slider sensitivitySlider;
-    
+    [SerializeField] private TextMeshProUGUI pingText;
+
     private InputMapping mapping;
 
     public static Action<bool> onLockInputs;
@@ -19,15 +22,20 @@ public class SettingsMenu : MonoBehaviour
         mapping.Enable();
 
         mapping.Player.OpenMenu.performed += PerformOpenMenu;
-        
-        LockCursor(true);
+        mapping.Player.Stats.performed += OpenStats;
+        mapping.Player.Stats.canceled += CloseStats;
 
-        sensitivitySlider.value = GlobalSettingsData.Instance.mouseSensitivity;
+        pingText.gameObject.SetActive(pingToggle.isOn);
+        scoreboard.gameObject.SetActive(false);
+        
+        scoreboard.InitializeScoreboard(PhotonNetwork.connected ? PhotonNetwork.playerList : null);
     }
 
     private void OnDestroy()
     {
         mapping.Player.OpenMenu.performed -= PerformOpenMenu;
+        mapping.Player.Stats.performed -= OpenStats;
+        mapping.Player.Stats.canceled -= CloseStats;
     }
 
     private void PerformOpenMenu(InputAction.CallbackContext context)
@@ -38,18 +46,34 @@ public class SettingsMenu : MonoBehaviour
     private void OpenSettings(bool enable)
     {
         settingsMenu.SetActive(enable);
-        LockCursor(!enable);
         onLockInputs?.Invoke(enable);
 
         if (!enable)
         {
-            GlobalSettingsData.Instance.mouseSensitivity = sensitivitySlider.value;
+            pingText.gameObject.SetActive(pingToggle.isOn);
         }
     }
-    
-    public static void LockCursor(bool locked)
+
+    private void OpenStats(InputAction.CallbackContext context)
     {
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-        //Cursor.visible = locked;
+        scoreboard.gameObject.SetActive(true);
+
+        if (PhotonNetwork.connected)
+        {
+            scoreboard.UpdateScoreboard(PhotonNetwork.playerList);
+        }
+    }
+
+    private void CloseStats(InputAction.CallbackContext context)
+    {
+        scoreboard.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (PhotonNetwork.connected)
+        {
+            pingText.text = $"PING: {PhotonNetwork.GetPing()}ms";
+        }
     }
 }

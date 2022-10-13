@@ -60,7 +60,7 @@ public class LobbyManager : PunBehaviour
         refreshRoomListButton.onClick.AddListener(RefreshRoomList);
         createRoomButton.onClick.AddListener(CreateRoom);
 
-        roomScreen.onLeaveRoom += () => SetActiveScreen(LobbyScreen.Lobby);
+        roomScreen.onLeaveRoom += LeaveRoom;
     }
 
     private void OnDestroy()
@@ -102,6 +102,18 @@ public class LobbyManager : PunBehaviour
     {
         loadingScreen.SetActive(enable);
     }
+    
+    private void LeaveRoom()
+    {
+        StartCoroutine(Transition());
+
+        IEnumerator Transition()
+        {
+            Transitioner.Begin();
+            while (Transitioner.IsTransitioning) yield return null;
+            SetActiveScreen(LobbyScreen.Lobby);
+        }
+    }
 
     private void Connect()
     {
@@ -122,10 +134,17 @@ public class LobbyManager : PunBehaviour
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
-        SetActiveScreen(LobbyScreen.Lobby);
-        connectButton.interactable = true;
 
-        PhotonNetwork.JoinLobby();
+        StartCoroutine(Transition());
+        IEnumerator Transition()
+        {
+            Transitioner.Begin();
+            while (Transitioner.IsTransitioning) yield return null;
+            SetActiveScreen(LobbyScreen.Lobby);
+            connectButton.interactable = true;
+
+            PhotonNetwork.JoinLobby();
+        }
     }
 
     public override void OnJoinedLobby()
@@ -137,16 +156,22 @@ public class LobbyManager : PunBehaviour
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        
-        SetActiveScreen(LobbyScreen.Room);
-        if (!MatchInstance.CurrentMatch.playerIsLeader)
-        {
-            MatchInstance.CurrentMatch.playerIsLeader = false;
-            roomScreen.photonView.RPC("SetupRoomScreen", PhotonTargets.All);
-        }
-        PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", 0);
 
-        EnableLoading(false);
+        StartCoroutine(Transition());
+        IEnumerator Transition()
+        {
+            Transitioner.Begin();
+            while (Transitioner.IsTransitioning) yield return null;
+            SetActiveScreen(LobbyScreen.Room);
+            if (!MatchInstance.CurrentMatch.playerIsLeader)
+            {
+                MatchInstance.CurrentMatch.playerIsLeader = false;
+                roomScreen.photonView.RPC("SetupRoomScreen", PhotonTargets.All);
+            }
+            PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", 0);
+
+            EnableLoading(false);
+        }
     }
 
     private void CreateRoom()

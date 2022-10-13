@@ -4,8 +4,10 @@ using UnityEngine;
 public class BaseSubKart : MonoBehaviour
 {
     [SerializeField] private Transform collider;
+    [SerializeField] private GameObject visuals;
 
     public Transform GetColliderTransform => collider;
+    public GameObject GetVisuals => visuals;
     
     public void UpdateRotation(Vector3 axisInput)
     {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Photon;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class RoomScreen : PunBehaviour
 {
+    [SerializeField] private string StartGame = "START GAME";
+    [SerializeField] private string WaitingGame = "WAIT ROOM LEADER START";
     [SerializeField] private PlayerData playerData;
     
     [SerializeField] private ScrollRect teamAScrollView;
@@ -45,7 +48,7 @@ public class RoomScreen : PunBehaviour
     [PunRPC]
     public void SetupRoomScreen()
     {
-        startMatchButtonText.text = MatchInstance.CurrentMatch.playerIsLeader ? "START GAME" : "WAITING START";
+        startMatchButtonText.text = MatchInstance.CurrentMatch.playerIsLeader ? StartGame : WaitingGame;
         startMatchButton.interactable = MatchInstance.CurrentMatch.playerIsLeader;
         
         foreach (Transform child in teamAScrollView.content.transform)
@@ -72,10 +75,16 @@ public class RoomScreen : PunBehaviour
         {
             photonView.RPC("StartMatch", PhotonTargets.Others);
         }
-
-        selectCharacterScreen.gameObject.SetActive(true);
-        selectCharacterScreen.InitialState();
-        selectCharacterScreen.StartCharacterSelection();
+        
+        StartCoroutine(Transition());
+        IEnumerator Transition()
+        {
+            Transitioner.Begin();
+            while (Transitioner.IsTransitioning) yield return null;
+            selectCharacterScreen.gameObject.SetActive(true);
+            selectCharacterScreen.InitialState();
+            selectCharacterScreen.StartCharacterSelection();
+        }
     }
 
     private void QuitRoom()
