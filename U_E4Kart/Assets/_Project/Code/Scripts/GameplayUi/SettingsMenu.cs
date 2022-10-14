@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
@@ -9,6 +11,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private Toggle pingToggle;
     [SerializeField] private Scoreboard scoreboard;
+    [SerializeField] private Button leaveMatchButton;
     
     [SerializeField] private TextMeshProUGUI pingText;
 
@@ -20,6 +23,8 @@ public class SettingsMenu : MonoBehaviour
     {
         mapping = new InputMapping();
         mapping.Enable();
+        
+        leaveMatchButton.onClick.AddListener(LeaveMatch);
 
         mapping.Player.OpenMenu.performed += PerformOpenMenu;
         mapping.Player.Stats.performed += OpenStats;
@@ -67,6 +72,20 @@ public class SettingsMenu : MonoBehaviour
     private void CloseStats(InputAction.CallbackContext context)
     {
         scoreboard.gameObject.SetActive(false);
+    }
+
+    private void LeaveMatch()
+    {
+        leaveMatchButton.interactable = false;
+        PhotonNetwork.LeaveLobby();
+
+        StartCoroutine(WaitToChangeScene());
+        IEnumerator WaitToChangeScene()
+        {
+            Transitioner.Begin();
+            yield return new WaitWhile(() => Transitioner.IsTransitioning);
+            SceneManager.LoadScene("SCN_Lobby");
+        }
     }
 
     private void Update()
