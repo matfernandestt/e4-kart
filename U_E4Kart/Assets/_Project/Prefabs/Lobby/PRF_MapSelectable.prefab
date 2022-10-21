@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 5687215521102413266}
   - component: {fileID: 5687215521102413265}
   - component: {fileID: 6768132048721452837}
+  - component: {fileID: 2969282964784833487}
   m_Layer: 5
   m_Name: MapIcon
   m_TagString: Untagged
@@ -333,6 +334,28 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &2969282964784833487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687215521102413279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad52ff89295e1840868368f7e4c5ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomOrder: 0
+  sfxOptions:
+  - {fileID: 8300000, guid: 604c925248c3eae40be4e588516acc54, type: 3}
+  - {fileID: 8300000, guid: e575d590766d121458b76b46a47fa1d8, type: 3}
+  - {fileID: 8300000, guid: b92c9b864ce51c646a13feafcc715ca5, type: 3}
+  - {fileID: 8300000, guid: 484ee61bdcc887d4c9653c619e6142f5, type: 3}
+  - {fileID: 8300000, guid: 2fa9f40d987c38344a1ea469fbf1781a, type: 3}
+  - {fileID: 8300000, guid: 0f0afb70dae24ae4c8b26fdb7c0c566a, type: 3}
+  - {fileID: 8300000, guid: 0d3cd91294aa526419e3fd834135b606, type: 3}
+  - {fileID: 8300000, guid: a7e97b6f698f2b140b93ae0084f4f719, type: 3}
 --- !u!1 &5807012700310663566
 GameObject:
   m_ObjectHideFlags: 0

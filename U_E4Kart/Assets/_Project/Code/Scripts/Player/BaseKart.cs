@@ -20,6 +20,7 @@ public class BaseKart : MonoBehaviour
 
     private Rigidbody thisRigidbody;
     private Coroutine surroundingsDetectionRoutine;
+    private Coroutine endGameSurroundingsDetectionRoutine;
 
     private Quaternion normal;
     private Vector2 axisInput;
@@ -97,6 +98,12 @@ public class BaseKart : MonoBehaviour
         }
     }
 
+    public void DisableController()
+    {
+        input.Disable();
+        EndGameDetectSurroundings();
+    }
+
     private void StartAccelerating(InputAction.CallbackContext context)
     {
         momentumDirection /= 2;
@@ -172,6 +179,8 @@ public class BaseKart : MonoBehaviour
     {
         if (surroundingsDetectionRoutine != null)
             StopCoroutine(surroundingsDetectionRoutine);
+        if (endGameSurroundingsDetectionRoutine != null)
+            StopCoroutine(endGameSurroundingsDetectionRoutine);
     }
 
     private void DetectSurroundings()
@@ -191,6 +200,40 @@ public class BaseKart : MonoBehaviour
                     if (deathCollision != null)
                     {
                         Respawn();
+                    }
+
+                    var finishLine = collision.GetComponent<FinishLine>();
+                    if (finishLine != null && collision.isTrigger)
+                    {
+                        finishLine.FinishRace(PhotonNetwork.player);
+                        StopDetectingSurroundings();
+                    }
+                }
+                yield return null;
+            }
+        }
+    }
+    
+    private void EndGameDetectSurroundings()
+    {
+        if (surroundingsDetectionRoutine != null)
+            StopCoroutine(surroundingsDetectionRoutine);
+        if (endGameSurroundingsDetectionRoutine != null)
+            StopCoroutine(endGameSurroundingsDetectionRoutine);
+        endGameSurroundingsDetectionRoutine = StartCoroutine(Detection());
+
+        IEnumerator Detection()
+        {
+            while (true)
+            {
+                var surroundings = Physics.OverlapSphere(transform.position, 1f);
+                foreach (var collision in surroundings)
+                {
+                    var deathCollision = collision.GetComponent<RespawnerPlane>();
+                    if (deathCollision != null)
+                    {
+                        EnableMovement(false);
+                        StopDetectingSurroundings();
                     }
                 }
                 yield return null;

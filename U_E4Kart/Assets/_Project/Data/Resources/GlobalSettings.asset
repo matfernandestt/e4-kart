@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentSelectionTime: 5
   localPlayerData: {fileID: 11400000, guid: 46c1be56885afe9498f8d6292afebd9c, type: 2}
-  mouseSensitivity: 25
   cameraPositionOffset: {x: 0, y: 0, z: 0}
   cameraRotationOffset: {x: 0, y: 0, z: 0}
   cameraFollowDelay: 10
-  chosenMap: {fileID: 0}
+  savedBgmVolume: -25
+  savedSfxVolume: 0
+  bgmMixer: {fileID: 24100000, guid: a30bb9c38fda9f94aaf155ea28aa61e8, type: 2}
+  sfxMixer: {fileID: 24100000, guid: 642a1a4c872ebbd4e814d2cc70f89685, type: 2}
+  chosenMap: {fileID: 11400000, guid: dda10b6b453037a41a5793a5f30f6160, type: 2}

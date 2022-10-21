@@ -1,0 +1,46 @@
+# Blender MTL File: 'Shell Trophy.blend'
+# Material Count: 4
+
+newmtl m_Koura
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd Koura_Alb.1.png
+map_d Koura_Alb.1.png
+
+newmtl m_KouraJuel
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd KouraJuel_Alb.png
+map_d KouraJuel_Alb.png
+
+newmtl m_KouraMetal
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd KouraMetal_Alb.1.png
+map_d KouraMetal_Alb.1.png
+
+newmtl m_KouraWing
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni -1.000000
+d 0.000000
+illum 1
+map_Kd KouraWing_Alb.png
+map_d KouraWing_Alb.png

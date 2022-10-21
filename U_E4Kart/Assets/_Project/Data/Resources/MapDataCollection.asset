@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: MapDataCollection
   m_EditorClassIdentifier: 
   maps:
+  - {fileID: 0}
   - {fileID: 11400000, guid: e3e5bc3baf45e834287f04b55a05d16f, type: 2}
   - {fileID: 11400000, guid: dda10b6b453037a41a5793a5f30f6160, type: 2}

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Photon;
 using UnityEngine;
+using ExitGames.Client.Photon;
 
 public class RaceController : PunBehaviour
 {
@@ -10,10 +11,20 @@ public class RaceController : PunBehaviour
     private PhotonPlayer[] playerList;
 
     public static Action onStartRace;
+    public static Action onFinishRace;
+    
+    public const string CustomProperty_RaceWinner = "raceWinner";
 
     private void Awake()
     {
         playerList = PhotonNetwork.playerList;
+
+        onFinishRace += OnFinishRace;
+    }
+
+    private void OnDestroy()
+    {
+        onFinishRace -= OnFinishRace;
     }
 
     private IEnumerator Start()
@@ -26,8 +37,11 @@ public class RaceController : PunBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-        var mapName = GlobalSettingsData.Instance.GetChosenMap.gameMapPrefab.name;
-        PhotonNetwork.Instantiate(mapName, Vector3.zero, Quaternion.identity, 0);
+        if (MatchInstance.CurrentMatch.playerIsLeader)
+        {
+            var mapName = GlobalSettingsData.Instance.GetChosenMap.gameMapPrefab.name;
+            PhotonNetwork.Instantiate(mapName, Vector3.zero, Quaternion.identity, 0);
+        }
         yield return new WaitForSeconds(1f);
         startAnnouncer = FindObjectOfType<RaceAnnouncer>(true);
         kartPositioners = FindObjectOfType<KartPositioners>(true);
@@ -42,5 +56,43 @@ public class RaceController : PunBehaviour
 
         var charName = CharacterDataCollection.GetAgentObject((int)PlayerData.GetCustomProperty(PhotonNetwork.player, "selectedAgent")).characterPrefab.name;
         PhotonNetwork.Instantiate("Characters/" + charName, position, Quaternion.identity, 0);
+    }
+
+    [PunRPC]
+    public void OnFinishRace()
+    {
+        onFinishRace -= OnFinishRace;
+        photonView.RPC("OnFinishRace", PhotonTargets.Others);
+        photonView.RPC("ForceOtherPlayersToFinishRace", PhotonTargets.Others);
+
+        var karts = FindObjectsOfType<BaseKart>(true);
+        foreach (var kart in karts)
+        {
+            kart.DisableController();
+        }
+    }
+
+    [PunRPC]
+    public void ForceOtherPlayersToFinishRace()
+    {
+        onFinishRace?.Invoke();
+    }
+    
+    public static void SetCustomProperty(string customPropertyName, object value)
+    {
+        var room = PhotonNetwork.room;
+        if (room.CustomProperties.ContainsKey(customPropertyName))
+        {
+            room.CustomProperties.Remove(customPropertyName);
+        }
+        
+        var hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add(customPropertyName, value);
+        room.SetCustomProperties(hash);
+    }
+    
+    public static object GetCustomProperty(string customPropertyName)
+    { 
+        return PhotonNetwork.room.CustomProperties[customPropertyName];
     }
 }

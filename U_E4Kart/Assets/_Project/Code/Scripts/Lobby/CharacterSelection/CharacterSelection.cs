@@ -17,6 +17,8 @@ public class CharacterSelection : PunBehaviour
     [SerializeField] private Timer startMatchTimer;
     [SerializeField] private CharacterShowcase characterShowcase;
 
+    [SerializeField] private AudioClip secretUnlock;
+
     private SelectableAgentBase[] selectableAgents;
 
     private Coroutine agentSelectionCoroutine;
@@ -25,6 +27,7 @@ public class CharacterSelection : PunBehaviour
 
     public static Action<AgentSelectionPlayer> onSpawnLocalAgentSelectionPlayer;
     public static Action<CharacterData> onLocalPlayerSelectAgent;
+    public static Action<CharacterData> onSelectSecretCharacter;
 
     private void Awake()
     {
@@ -32,7 +35,7 @@ public class CharacterSelection : PunBehaviour
         
         onSpawnLocalAgentSelectionPlayer += SetLocalAgentSelectionPlayer;
         onLocalPlayerSelectAgent += LocalPlayerSelectedAgent;
-        
+
         confirmAgentButton.onClick.AddListener(OnConfirmAgent);
         
         startMatchTimer.gameObject.SetActive(false);
@@ -57,6 +60,8 @@ public class CharacterSelection : PunBehaviour
         confirmCharacterButtonText.text = "Select a character";
         confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(false);
+        
+        onSelectSecretCharacter += SelectSecretCharacter;
     }
 
     public void StartCharacterSelection()
@@ -71,11 +76,6 @@ public class CharacterSelection : PunBehaviour
 
     private void LocalPlayerSelectedAgent(CharacterData characterData)
     {
-        var src = sfxPool.GetInstance(Vector3.zero);
-        src.clip = characterData.sfx_OnSelectCharacter;
-        src.Play();
-        sfxPool.ReturnInstanceWhenConcludePlaying(src);
-        
         confirmCharacterButtonText.text = "Confirm character";
         confirmAgentButton.interactable = true;
         
@@ -85,13 +85,33 @@ public class CharacterSelection : PunBehaviour
         characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals);
     }
 
+    private void SelectSecretCharacter(CharacterData characterData)
+    {
+        var src = sfxPool.GetInstance(Vector3.zero);
+        src.clip = secretUnlock;
+        src.Play();
+        sfxPool.ReturnInstanceWhenConcludePlaying(src);
+        
+        onSelectSecretCharacter = null;
+        agentSelectionPlayer.SetAgent(characterData);
+        localSelectedCharacter = characterData;
+        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals);
+        
+        OnConfirmAgent();
+    }
+
     private void OnConfirmAgent()
     {
+        var src = sfxPool.GetInstance(Vector3.zero);
+        src.clip = localSelectedCharacter.sfx_OnSelectCharacter;
+        src.Play();
+        sfxPool.ReturnInstanceWhenConcludePlaying(src);
+        
         confirmCharacterButtonText.text = "Waiting for match to start";
         characterShowcase.EndShowcase();
         confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(true);
-        PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", CharacterDataCollection.GetAgentId(localSelectedCharacter));
+        PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_SelectedCharacter, CharacterDataCollection.GetAgentId(localSelectedCharacter));
 
         photonView.RPC("UpdatePlayers", PhotonTargets.All);
     }
@@ -103,7 +123,7 @@ public class CharacterSelection : PunBehaviour
         var players = PhotonNetwork.playerList;
         foreach (var player in players)
         {
-            var selectedAgent = (int) player.CustomProperties["selectedAgent"];
+            var selectedAgent = (int) player.CustomProperties[PlayerData.CustomProperty_SelectedCharacter];
             if (selectedAgent != null)
             {
                 if (selectedAgent != 0)
@@ -120,6 +140,7 @@ public class CharacterSelection : PunBehaviour
 
     private void StartMatch()
     {
+        onSelectSecretCharacter = null;
         Transitioner.FadeIn();
 
         StartCoroutine(WaitToStart());

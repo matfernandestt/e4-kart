@@ -85,9 +85,12 @@ public class RoomScreen : PunBehaviour
                 if (selectedMapProperty != null)
                 {
                     var currentLeaderMap = MapDataCollection.GetMapObject((int) selectedMapProperty);
-                    GlobalSettingsData.Instance.SetLowkeyChosenMap(currentLeaderMap);
-                    selectedMap.sprite = currentLeaderMap.mapIcon;
-                    selectedMapName.text = currentLeaderMap.mapName;
+                    if (currentLeaderMap != null)
+                    {
+                        GlobalSettingsData.Instance.SetLowkeyChosenMap(currentLeaderMap);
+                        selectedMap.sprite = currentLeaderMap.mapIcon;
+                        selectedMapName.text = currentLeaderMap.mapName;
+                    }
                 }
             }
         }
@@ -97,7 +100,11 @@ public class RoomScreen : PunBehaviour
     public void SetupRoomScreen()
     {
         if (!MatchInstance.CurrentMatch.playerIsLeader)
+        {
             startMatchButton.interactable = false;
+            RefreshSelectedMap();
+        }
+
         startMatchButtonText.text = MatchInstance.CurrentMatch.playerIsLeader ? StartGame : WaitingGame;
 
         foreach (Transform child in teamAScrollView.content.transform)
@@ -139,8 +146,15 @@ public class RoomScreen : PunBehaviour
         }
     }
 
-    private void QuitRoom()
+    [PunRPC]
+    public void QuitRoom()
     {
+        if (MatchInstance.CurrentMatch.playerIsLeader)
+        {
+            photonView.RPC("QuitRoom", PhotonTargets.Others);
+            MatchInstance.CurrentMatch.playerIsLeader = false;
+            PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_IsRoomLeader, false);
+        }
         PhotonNetwork.LeaveRoom();
         photonView.RPC("SetupRoomScreen", PhotonTargets.All);
         onLeaveRoom?.Invoke();

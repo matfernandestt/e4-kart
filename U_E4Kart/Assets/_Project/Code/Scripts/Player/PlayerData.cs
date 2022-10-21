@@ -9,6 +9,7 @@ public class PlayerData : ScriptableObject
 
     public const string CustomProperty_IsRoomLeader = "isRoomLeader";
     public const string CustomProperty_SelectedMap = "selectedMap";
+    public const string CustomProperty_SelectedCharacter = "selectedAgent";
 
     public static void SetCustomProperty(PhotonPlayer player, string customPropertyName, object value)
     {

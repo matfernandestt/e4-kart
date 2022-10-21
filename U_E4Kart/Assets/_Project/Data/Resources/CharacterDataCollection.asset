@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameAgents:
   - {fileID: 11400000, guid: 61678e0d63279d4409ffc393b9c7b6e8, type: 2}
+  - {fileID: 11400000, guid: 9c5905fa5ee6b0a4b9822f1114ea77f9, type: 2}
   - {fileID: 11400000, guid: ef92a4b1b24b0ab4cbd0d75e6146a120, type: 2}
   - {fileID: 11400000, guid: 0a5c2ead9c8f47c4d9521337d7320b6e, type: 2}
   - {fileID: 11400000, guid: 2385e388dbfa55744b933d1deba159fa, type: 2}

@@ -10,6 +10,8 @@ public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private Toggle pingToggle;
+    [SerializeField] private Slider bgmVolumeSlider;
+    [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Scoreboard scoreboard;
     [SerializeField] private Button leaveMatchButton;
     
@@ -24,7 +26,13 @@ public class SettingsMenu : MonoBehaviour
         mapping = new InputMapping();
         mapping.Enable();
         
-        leaveMatchButton.onClick.AddListener(LeaveMatch);
+        if(leaveMatchButton != null)
+            leaveMatchButton.onClick.AddListener(LeaveMatch);
+        
+        bgmVolumeSlider.value = GlobalSettingsData.Instance.savedBgmVolume;
+        bgmVolumeSlider.value = GlobalSettingsData.Instance.savedSfxVolume;
+        bgmVolumeSlider.onValueChanged.AddListener(OnChangeVolumeBGM);
+        sfxVolumeSlider.onValueChanged.AddListener(OnChangeVolumeSFX);
 
         mapping.Player.OpenMenu.performed += PerformOpenMenu;
         mapping.Player.Stats.performed += OpenStats;
@@ -59,6 +67,16 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
+    private void OnChangeVolumeBGM(float value)
+    {
+        GlobalSettingsData.Instance.Set_BGM_Volume(value);
+    }
+    
+    private void OnChangeVolumeSFX(float value)
+    {
+        GlobalSettingsData.Instance.Set_SFX_Volume(value);
+    }
+
     private void OpenStats(InputAction.CallbackContext context)
     {
         scoreboard.gameObject.SetActive(true);
@@ -77,7 +95,7 @@ public class SettingsMenu : MonoBehaviour
     private void LeaveMatch()
     {
         leaveMatchButton.interactable = false;
-        PhotonNetwork.LeaveLobby();
+        PhotonNetwork.LeaveRoom();
 
         StartCoroutine(WaitToChangeScene());
         IEnumerator WaitToChangeScene()

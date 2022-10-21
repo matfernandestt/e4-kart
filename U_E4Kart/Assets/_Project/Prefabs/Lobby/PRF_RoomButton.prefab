@@ -437,6 +437,7 @@ GameObject:
   - component: {fileID: 9054234639233621877}
   - component: {fileID: 9054234639233621876}
   - component: {fileID: 1829442067}
+  - component: {fileID: 6070755807826739367}
   m_Layer: 5
   m_Name: PRF_RoomButton
   m_TagString: Untagged
@@ -566,3 +567,16 @@ MonoBehaviour:
   roomName: {fileID: 9054234638876971921}
   playersInRoomText: {fileID: 908636758}
   roomAvailability: {fileID: 1528025579}
+--- !u!114 &6070755807826739367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9054234639233621866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a302a5edef609147a5a2db3f2af87ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfx: {fileID: 8300000, guid: 77e093ee025d97040bb0ca123675765b, type: 3}

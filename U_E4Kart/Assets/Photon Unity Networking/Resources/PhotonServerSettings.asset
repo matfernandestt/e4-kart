@@ -47,4 +47,7 @@ MonoBehaviour:
   - TaggedPlayer
   - UpdatePlayers
   - RefreshSelectedMap
+  - QuitRoom
+  - OnFinishRace
+  - ForceOtherPlayersToFinishRace
   DisableAutoOpenWizard: 1

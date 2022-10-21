@@ -17,6 +17,9 @@ public class BgmManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        GlobalSettingsData.Instance.Set_BGM_Volume(GlobalSettingsData.Instance.savedBgmVolume);
+        GlobalSettingsData.Instance.Set_SFX_Volume(GlobalSettingsData.Instance.savedSfxVolume);
     }
 
     public static void PlayBGM(AudioClip clip)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -8,6 +9,13 @@ public class Pool_SFX : ObjectPoolBase
     [SerializeField] private AudioSource prefabBase;
 
     [SerializeField] private List<AudioSource> objectsSpawned = new List<AudioSource>();
+
+    public static Pool_SFX Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public override void SpawnObjects()
     {

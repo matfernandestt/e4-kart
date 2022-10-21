@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 4623590737333084810}
   - component: {fileID: 4623590737333084811}
   - component: {fileID: 5461254028239742983}
+  - component: {fileID: 2351394543210735193}
   m_Layer: 5
   m_Name: PRF_SelectableCharacterBase
   m_TagString: Untagged
@@ -235,6 +236,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &2351394543210735193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623590737333084854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad52ff89295e1840868368f7e4c5ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomOrder: 0
+  sfxOptions:
+  - {fileID: 8300000, guid: 0ef454df749c27a4f8e9435f09ebdc88, type: 3}
 --- !u!1 &4623590737563334384
 GameObject:
   m_ObjectHideFlags: 0

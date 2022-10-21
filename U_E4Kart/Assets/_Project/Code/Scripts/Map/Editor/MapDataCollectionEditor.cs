@@ -14,6 +14,7 @@ public class MapDataCollectionEditor : Editor
         if (GUILayout.Button("Refresh Map List"))
         {
             var maps = new List<MapData>();
+            maps.Add(null);
             var assetsGuid = AssetDatabase.FindAssets("", new[] {"Assets/_Project/Data/Maps"});
             foreach (var guid in assetsGuid)
             {

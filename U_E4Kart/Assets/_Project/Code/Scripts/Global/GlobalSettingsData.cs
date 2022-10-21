@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(fileName = "GlobalSettings", menuName = "Settings/Global Settings")]
 public class GlobalSettingsData : ScriptableObject
@@ -7,10 +8,27 @@ public class GlobalSettingsData : ScriptableObject
     public int agentSelectionTime = 30;
     public PlayerData localPlayerData;
     
-    public float mouseSensitivity = 1f;
     public Vector3 cameraPositionOffset;
     public Vector3 cameraRotationOffset;
     public float cameraFollowDelay;
+
+    public float savedBgmVolume;
+    public float savedSfxVolume;
+
+    public AudioMixer bgmMixer;
+    public AudioMixer sfxMixer;
+
+    public void Set_BGM_Volume(float volume)
+    {
+        bgmMixer.SetFloat("Volume", volume);
+        savedBgmVolume = volume;
+    }
+    
+    public void Set_SFX_Volume(float volume)
+    {
+        sfxMixer.SetFloat("Volume", volume);
+        savedSfxVolume = volume;
+    }
 
     public void SetChosenMap(MapData data)
     {
@@ -25,7 +43,7 @@ public class GlobalSettingsData : ScriptableObject
     }
     public MapData GetChosenMap => chosenMap;
     
-    public MapData chosenMap;
+    [HideInInspector] public MapData chosenMap;
 
     public Action onMapSelected;
     

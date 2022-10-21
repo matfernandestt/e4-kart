@@ -38,6 +38,7 @@ public class LobbyManager : PunBehaviour
     [SerializeField] private Button createRoomButton;
     [SerializeField] private Button disconnectButton;
     [SerializeField] private RoomButton roomButtonPrefab;
+    [SerializeField] private GameObject roomSelectionBlocker;
 
     [Header("Room")]
     [SerializeField] private byte maxPlayersInRooms;
@@ -77,6 +78,12 @@ public class LobbyManager : PunBehaviour
     private void Start()
     {
         BgmManager.PlayBGM(menusBGM);
+
+        if (PhotonNetwork.connected)
+        {
+            welcomeBackTitle.text = $"Welcome back, {playerData.nickname}!";
+            SetActiveScreen(LobbyScreen.Lobby);
+        }
     }
 
     private void Update()
@@ -193,7 +200,7 @@ public class LobbyManager : PunBehaviour
                 MatchInstance.CurrentMatch.playerIsLeader = false;
                 roomScreen.photonView.RPC("SetupRoomScreen", PhotonTargets.All);
             }
-            PlayerData.SetCustomProperty(PhotonNetwork.player, "selectedAgent", 0);
+            PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_SelectedCharacter, 0);
 
             EnableLoading(false);
         }
@@ -212,7 +219,7 @@ public class LobbyManager : PunBehaviour
         MatchInstance.CurrentMatch.playerIsLeader = true;
         MatchInstance.CurrentMatch.onStartMatch += StartGame;
 
-        PlayerData.SetCustomProperty(PhotonNetwork.player, "isRoomLeader", MatchInstance.CurrentMatch.playerIsLeader);
+        PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_IsRoomLeader, MatchInstance.CurrentMatch.playerIsLeader);
 
         UpdatePlayerTeam();
         roomScreen.SetupRoomScreen();
@@ -230,6 +237,7 @@ public class LobbyManager : PunBehaviour
 
     private void OnEnterLobbyScreen()
     {
+        roomSelectionBlocker.SetActive(false);
         lobbyScreenCoroutine = StartCoroutine(UpdateLobby());
     }
 
@@ -253,6 +261,7 @@ public class LobbyManager : PunBehaviour
                         UpdatePlayerTeam();
                         PhotonNetwork.JoinRoom(room.Name);
                         roomScreen.EnableSelectMapButton(false);
+                        roomSelectionBlocker.SetActive(true);
                     });
             }
             yield return new WaitForSeconds(1f);
@@ -266,7 +275,7 @@ public class LobbyManager : PunBehaviour
             var match = MatchInstance.CurrentMatch;
         }
         
-        PlayerData.SetCustomProperty(PhotonNetwork.player, "isRoomLeader", MatchInstance.CurrentMatch.playerIsLeader);
+        PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_IsRoomLeader, MatchInstance.CurrentMatch.playerIsLeader);
     }
 
     private void StartGame()
