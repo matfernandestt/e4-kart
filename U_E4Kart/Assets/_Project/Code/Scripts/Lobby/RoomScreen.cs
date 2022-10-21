@@ -3,7 +3,6 @@ using System.Collections;
 using Photon;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RoomScreen : PunBehaviour
@@ -19,8 +18,11 @@ public class RoomScreen : PunBehaviour
     [SerializeField] private Button startMatchButton;
     [SerializeField] private Button quitRoomButton;
     [SerializeField] private TextMeshProUGUI startMatchButtonText;
+
+    [SerializeField] private Image selectedMap;
+    [SerializeField] private TextMeshProUGUI selectedMapName;
     
-    [FormerlySerializedAs("selectAgentScreen")] [SerializeField] private CharacterSelection selectCharacterScreen;
+    [SerializeField] private CharacterSelection selectCharacterScreen;
     [SerializeField] private MapSelectionScreen mapSelectionScreen;
 
     public Action onLeaveRoom;
@@ -32,11 +34,21 @@ public class RoomScreen : PunBehaviour
         selectMapButton.onClick.AddListener(SelectMap);
         startMatchButton.onClick.AddListener(StartMatch);
         quitRoomButton.onClick.AddListener(QuitRoom);
+
+        GlobalSettingsData.Instance.onMapSelected += RefreshSelectedMap;
+    }
+
+    private void OnDestroy()
+    {
+        GlobalSettingsData.Instance.onMapSelected -= RefreshSelectedMap;
     }
 
     public override void OnJoinedRoom()
     {
         SetupRoomScreen();
+        startMatchButton.interactable = false;
+        
+        RefreshSelectedMap();
     }
 
     public void EnableSelectMapButton(bool enable)
@@ -44,13 +56,50 @@ public class RoomScreen : PunBehaviour
         selectMapButton.gameObject.SetActive(enable);
         mapSelectionScreen.RefreshMapSelectionScreen();
     }
+
+    public void UpdateMapSelection()
+    {
+        RefreshSelectedMap();
+    }
+
+    [PunRPC]
+    public void RefreshSelectedMap()
+    {
+        var chosenMap = GlobalSettingsData.Instance.GetChosenMap;
+        if (MatchInstance.CurrentMatch.playerIsLeader)
+        {
+            startMatchButton.interactable = GlobalSettingsData.Instance.GetChosenMap != null;
+            photonView.RPC("RefreshSelectedMap", PhotonTargets.Others);
+            if (GlobalSettingsData.Instance.chosenMap != null)
+            {
+                selectedMap.sprite = chosenMap.mapIcon;
+                selectedMapName.text = chosenMap.mapName;
+            }
+        }
+        else
+        {
+            var leader = PlayerData.GetLeader();
+            if (leader != null)
+            {
+                var selectedMapProperty = leader.CustomProperties[PlayerData.CustomProperty_SelectedMap];
+                if (selectedMapProperty != null)
+                {
+                    var currentLeaderMap = MapDataCollection.GetMapObject((int) selectedMapProperty);
+                    GlobalSettingsData.Instance.SetLowkeyChosenMap(currentLeaderMap);
+                    selectedMap.sprite = currentLeaderMap.mapIcon;
+                    selectedMapName.text = currentLeaderMap.mapName;
+                }
+            }
+        }
+    }
     
     [PunRPC]
     public void SetupRoomScreen()
     {
+        if (!MatchInstance.CurrentMatch.playerIsLeader)
+            startMatchButton.interactable = false;
         startMatchButtonText.text = MatchInstance.CurrentMatch.playerIsLeader ? StartGame : WaitingGame;
-        startMatchButton.interactable = MatchInstance.CurrentMatch.playerIsLeader;
-        
+
         foreach (Transform child in teamAScrollView.content.transform)
             Destroy(child.gameObject);
 
@@ -58,7 +107,7 @@ public class RoomScreen : PunBehaviour
         foreach (var player in players)
         {
             var newPlayer = Instantiate(roomPlayerPrefab, teamAScrollView.content);
-            var isLeader = (bool) PlayerData.GetCustomProperty(player, "isRoomLeader");
+            var isLeader = (bool) PlayerData.GetCustomProperty(player, PlayerData.CustomProperty_IsRoomLeader);
             newPlayer.Setup(player.NickName, player.GetTeam(), isLeader);
         }
     }
@@ -79,6 +128,9 @@ public class RoomScreen : PunBehaviour
         StartCoroutine(Transition());
         IEnumerator Transition()
         {
+            startMatchButton.interactable = false;
+            selectMapButton.interactable = false;
+            quitRoomButton.interactable = false;
             Transitioner.Begin();
             while (Transitioner.IsTransitioning) yield return null;
             selectCharacterScreen.gameObject.SetActive(true);

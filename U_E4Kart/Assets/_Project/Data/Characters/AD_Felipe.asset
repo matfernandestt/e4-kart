@@ -16,3 +16,5 @@ MonoBehaviour:
   characterName: Felipe
   characterPrefab: {fileID: 1811671160884499255, guid: 924c08b18ed16c448af96d4cb792725a,
     type: 3}
+  sfx_OnSelectCharacter: {fileID: 8300000, guid: ed356f275f094e949948e3feda2e2eb9,
+    type: 3}

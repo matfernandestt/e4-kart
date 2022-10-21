@@ -23,6 +23,8 @@ public class SelectableMap : MonoBehaviour
     public MapData SetSelected(bool selected)
     {
         thisToggle.isOn = selected;
+        if(!selected)
+            thisToggle.interactable = true;
         return data;
     }
 
@@ -34,6 +36,7 @@ public class SelectableMap : MonoBehaviour
     {
         if (value)
         {
+            thisToggle.interactable = false;
             onSelectMap?.Invoke(data, this);
         }
     }

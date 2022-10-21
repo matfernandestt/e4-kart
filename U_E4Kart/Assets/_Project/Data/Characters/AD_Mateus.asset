@@ -16,3 +16,5 @@ MonoBehaviour:
   characterName: Mateus
   characterPrefab: {fileID: 919838958998732070, guid: 84c2f13b895400b42b3a03d0e1e30f75,
     type: 3}
+  sfx_OnSelectCharacter: {fileID: 8300000, guid: e39975584562dae4b879f7b34add07f9,
+    type: 3}

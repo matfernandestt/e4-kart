@@ -33,13 +33,18 @@ public class LobbyManager : PunBehaviour
 
     [Header("Lobby Screen")]
     [SerializeField] private ScrollRect roomScrollView;
+    [SerializeField] private TextMeshProUGUI welcomeBackTitle;
     [SerializeField] private Button refreshRoomListButton;
     [SerializeField] private Button createRoomButton;
+    [SerializeField] private Button disconnectButton;
     [SerializeField] private RoomButton roomButtonPrefab;
 
     [Header("Room")]
     [SerializeField] private byte maxPlayersInRooms;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip menusBGM;
+    
     private Coroutine lobbyScreenCoroutine;
     private LobbyScreen currentLobbyScreen;
 
@@ -59,6 +64,7 @@ public class LobbyManager : PunBehaviour
         connectButton.onClick.AddListener(Connect);
         refreshRoomListButton.onClick.AddListener(RefreshRoomList);
         createRoomButton.onClick.AddListener(CreateRoom);
+        disconnectButton.onClick.AddListener(Disconnect);
 
         roomScreen.onLeaveRoom += LeaveRoom;
     }
@@ -66,6 +72,11 @@ public class LobbyManager : PunBehaviour
     private void OnDestroy()
     {
         roomScreen.onLeaveRoom = null;
+    }
+    
+    private void Start()
+    {
+        BgmManager.PlayBGM(menusBGM);
     }
 
     private void Update()
@@ -98,6 +109,19 @@ public class LobbyManager : PunBehaviour
         currentLobbyScreen = screen;
     }
 
+    private void Disconnect()
+    {
+        StartCoroutine(Transition());
+
+        IEnumerator Transition()
+        {
+            PhotonNetwork.Disconnect();
+            Transitioner.Begin();
+            while (Transitioner.IsTransitioning) yield return null;
+            SetActiveScreen(LobbyScreen.Connect);
+        }
+    }
+
     private void EnableLoading(bool enable)
     {
         loadingScreen.SetActive(enable);
@@ -127,6 +151,7 @@ public class LobbyManager : PunBehaviour
 
         PhotonNetwork.playerName = nicknameInputField.text;
         playerData.nickname = nicknameInputField.text;
+        welcomeBackTitle.text = $"Welcome back, {playerData.nickname}!";
 
         PhotonNetwork.ConnectUsingSettings("v1.0");
     }
@@ -192,6 +217,8 @@ public class LobbyManager : PunBehaviour
         UpdatePlayerTeam();
         roomScreen.SetupRoomScreen();
         roomScreen.EnableSelectMapButton(true);
+        GlobalSettingsData.Instance.SetChosenMap(null);
+        roomScreen.UpdateMapSelection();
     }
 
     private void RefreshRoomList()

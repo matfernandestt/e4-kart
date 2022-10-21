@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MAP_Default
   m_EditorClassIdentifier: 
   mapName: Default Map
-  mapIcon: {fileID: 21300000, guid: 1bdfbf15f6abec34e9bb38e2d81fcc84, type: 3}
-  gameMapPrefab: {fileID: 2891982716759720587, guid: 5a3d8b3d7e7e5164c8461a9c8dd42586,
+  mapIcon: {fileID: 21300000, guid: 085ea2b6f9792394cb97e3c160ef6ffb, type: 3}
+  gameMapPrefab: {fileID: 7536717081637521325, guid: bb04cb3a0ac17784e90f6ad8505f26ae,
     type: 3}
+  bgm: {fileID: 8300000, guid: 3750dbda359e3094e9e2fdcdb64d6f3e, type: 3}

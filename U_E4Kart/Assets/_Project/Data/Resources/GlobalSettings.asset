@@ -18,3 +18,4 @@ MonoBehaviour:
   cameraPositionOffset: {x: 0, y: 0, z: 0}
   cameraRotationOffset: {x: 0, y: 0, z: 0}
   cameraFollowDelay: 10
+  chosenMap: {fileID: 0}

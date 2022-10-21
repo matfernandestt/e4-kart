@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GlobalSettings", menuName = "Settings/Global Settings")]
@@ -11,10 +12,22 @@ public class GlobalSettingsData : ScriptableObject
     public Vector3 cameraRotationOffset;
     public float cameraFollowDelay;
 
-    public void SetChosenMap(MapData data) { chosenMap = data; }
+    public void SetChosenMap(MapData data)
+    {
+        chosenMap = data;
+        PlayerData.SetCustomProperty(PhotonNetwork.player, PlayerData.CustomProperty_SelectedMap, MapDataCollection.GetMapId(data));
+        onMapSelected?.Invoke();
+    }
+
+    public void SetLowkeyChosenMap(MapData data)
+    {
+        chosenMap = data;
+    }
     public MapData GetChosenMap => chosenMap;
     
-    private MapData chosenMap;
+    public MapData chosenMap;
+
+    public Action onMapSelected;
     
     private static GlobalSettingsData _instance;
     public static GlobalSettingsData Instance

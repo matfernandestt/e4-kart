@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7a68705f032b0409178f69b21575f7, type: 3}
+  m_Name: MAP_LabGames
+  m_EditorClassIdentifier: 
+  mapName: Lab Games
+  mapIcon: {fileID: 21300000, guid: 24618c992d914f046a6c46a9e4c75df1, type: 3}
+  gameMapPrefab: {fileID: 3772652914478583190, guid: e199ddf572b9b6647bdd5c9f84e8118c,
+    type: 3}
+  bgm: {fileID: 8300000, guid: 3750dbda359e3094e9e2fdcdb64d6f3e, type: 3}

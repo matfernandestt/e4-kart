@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class RaceController : PunBehaviour
 {
-    [SerializeField] private GameObject startAnnouncer;
-    [SerializeField] private KartPositioners kartPositioners;
-
+    private RaceAnnouncer startAnnouncer;
+    private KartPositioners kartPositioners;
     private PhotonPlayer[] playerList;
 
     public static Action onStartRace;
@@ -20,11 +19,24 @@ public class RaceController : PunBehaviour
     private IEnumerator Start()
     {
         if (!PhotonNetwork.connected) yield break;
-        startAnnouncer.SetActive(false);
-        yield return new WaitForSeconds(1f);
-        startAnnouncer.SetActive(true);
-        Transitioner.FadeOut();
+        var mapsAlreadySpawned = FindObjectsOfType<GameMap>();
+        foreach (var map in mapsAlreadySpawned)
+        {
+            Destroy(map.gameObject);
+        }
 
+        yield return new WaitForSeconds(1f);
+        var mapName = GlobalSettingsData.Instance.GetChosenMap.gameMapPrefab.name;
+        PhotonNetwork.Instantiate(mapName, Vector3.zero, Quaternion.identity, 0);
+        yield return new WaitForSeconds(1f);
+        startAnnouncer = FindObjectOfType<RaceAnnouncer>(true);
+        kartPositioners = FindObjectOfType<KartPositioners>(true);
+        
+        startAnnouncer.gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        startAnnouncer.gameObject.SetActive(true);
+        Transitioner.FadeOut();
+        
         var position = Vector3.zero;
         position = kartPositioners.GetPositionFromId(PhotonNetwork.player.ID - 1).position;
 

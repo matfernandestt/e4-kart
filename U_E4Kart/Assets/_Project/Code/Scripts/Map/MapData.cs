@@ -6,6 +6,7 @@ public class MapData : ScriptableObject
     public string mapName;
     public Sprite mapIcon;
     public GameMap gameMapPrefab;
+    public AudioClip bgm;
 
     public string prefabName => gameMapPrefab.gameObject.name;
 }

@@ -11,6 +11,7 @@ public class CharacterSelection : PunBehaviour
     [SerializeField] private Button confirmAgentButton;
     [SerializeField] private TextMeshProUGUI confirmCharacterButtonText;
     [SerializeField] private GameObject agentSelectionBlocker;
+    [SerializeField] private Pool_SFX sfxPool;
 
     [SerializeField] private ConnectedPlayersGrid connectedPlayersGrid;
     [SerializeField] private Timer startMatchTimer;
@@ -70,6 +71,11 @@ public class CharacterSelection : PunBehaviour
 
     private void LocalPlayerSelectedAgent(CharacterData characterData)
     {
+        var src = sfxPool.GetInstance(Vector3.zero);
+        src.clip = characterData.sfx_OnSelectCharacter;
+        src.Play();
+        sfxPool.ReturnInstanceWhenConcludePlaying(src);
+        
         confirmCharacterButtonText.text = "Confirm character";
         confirmAgentButton.interactable = true;
         
