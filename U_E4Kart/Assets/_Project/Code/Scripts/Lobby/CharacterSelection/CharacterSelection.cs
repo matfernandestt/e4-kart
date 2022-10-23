@@ -59,12 +59,11 @@ public class CharacterSelection : PunBehaviour
         confirmCharacterButtonText.text = "Select a character";
         confirmAgentButton.interactable = false;
         agentSelectionBlocker.SetActive(false);
-        
-        onSelectSecretCharacter += SelectSecretCharacter;
     }
 
     public void StartCharacterSelection()
     {
+        onSelectSecretCharacter += SelectSecretCharacter;
         UpdatePlayers();
     }
 
@@ -101,6 +100,7 @@ public class CharacterSelection : PunBehaviour
 
     private void OnConfirmAgent()
     {
+        onSelectSecretCharacter = null;
         var src = Pool_SFX.Instance.GetInstance(Vector3.zero);
         src.clip = localSelectedCharacter.sfx_OnSelectCharacter;
         src.Play();

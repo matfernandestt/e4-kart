@@ -68,6 +68,7 @@ public class SettingsMenu : MonoBehaviour
         if (!enable)
         {
             pingText.gameObject.SetActive(pingToggle.isOn);
+            GlobalSettingsData.Instance.loadedSave.save.showPing = pingToggle.isOn;
             SaveSystem.Save();
         }
     }

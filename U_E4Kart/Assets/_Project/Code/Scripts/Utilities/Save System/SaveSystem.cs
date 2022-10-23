@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class SaveSystem
@@ -29,14 +31,12 @@ public class SaveSystem
             Debug.LogWarning("No save file found!");
             return;
         }
-
         GlobalSettingsData.Instance.loadedSave.save = JsonUtility.FromJson<Save>(File.ReadAllText(path));
     }
 
     public static void Save()
     {
         var path = $"{Application.dataPath}/{fileName}.{extension}";
-
         File.WriteAllText(path, JsonUtility.ToJson(GlobalSettingsData.Instance.loadedSave.save));
     }
 }

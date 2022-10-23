@@ -10,10 +10,12 @@ using Vector3 = UnityEngine.Vector3;
 public class BaseKart : MonoBehaviour
 {
     public BaseSubKart subKart;
+    public CameraFollower myCam;
 
     public bool isGrounded;
     public bool isAccelerating;
     public bool isBraking;
+    public bool isReversing;
 
     public float speed;
     public float maxSpeed;
@@ -41,6 +43,7 @@ public class BaseKart : MonoBehaviour
         input.Enable();
 
         input.Player.Accelerate.performed += StartAccelerating;
+        input.Player.Reverse.canceled += StoppedReversing;
         RaceController.onStartRace += OnStartRace;
 
         momentumDirection = Vector3.zero;
@@ -51,13 +54,14 @@ public class BaseKart : MonoBehaviour
     private void OnDestroy()
     {
         input.Player.Accelerate.performed -= StartAccelerating;
+        input.Player.Reverse.canceled -= StoppedReversing;
         RaceController.onStartRace -= OnStartRace;
     }
 
-    public void RegisterCheckpoint()
+    public void RegisterCheckpoint(Vector3 position, Quaternion rotation)
     {
-        checkpointPosition = transform.position;
-        checkpointRotation = transform.rotation;
+        checkpointPosition = position;
+        checkpointRotation = rotation;
         checkpointSubKartRotation = subKart.transform.rotation;
     }
 
@@ -73,7 +77,7 @@ public class BaseKart : MonoBehaviour
 
     private void OnStartRace()
     {
-        RegisterCheckpoint();
+        RegisterCheckpoint(transform.position, transform.rotation);
         EnableMovement(true);
     }
 
@@ -106,8 +110,13 @@ public class BaseKart : MonoBehaviour
 
     private void StartAccelerating(InputAction.CallbackContext context)
     {
-        momentumDirection /= 2;
+        //momentumDirection /= 2;
         //thisRigidbody.velocity = momentumDirection;
+    }
+    
+    private void StoppedReversing(InputAction.CallbackContext context)
+    {
+        myCam.ForceNormalCamera();
     }
 
     private void Update()
@@ -115,6 +124,10 @@ public class BaseKart : MonoBehaviour
         isAccelerating = input.Player.Accelerate.ReadValue<float>() != 0;
         isBraking = input.Player.Brake.ReadValue<float>() != 0;
         axisInput = input.Player.Movement.ReadValue<Vector2>();
+        isReversing = input.Player.Reverse.ReadValue<float>() != 0;
+        
+        if(myCam != null)
+            myCam.UpdateReverseInput(isReversing);
     }
 
     private void FixedUpdate()
@@ -155,11 +168,20 @@ public class BaseKart : MonoBehaviour
         thisRigidbody.AddForce((isGrounded ? -transform.up : Vector3.down) * 10f);
         if (isGrounded)
         {
-            if (isAccelerating && !isBraking)
+            if (isAccelerating && !isBraking && !isReversing)
             {
                 if (thisRigidbody.velocity.magnitude < maxSpeed)
                 {
                     momentumDirection = Vector3.Lerp(momentumDirection, subKart.transform.forward, Time.deltaTime);
+                    thisRigidbody.velocity = momentumDirection * Time.deltaTime * speed;
+                }
+            }
+
+            if (isReversing && !isBraking && !isAccelerating)
+            {
+                if (thisRigidbody.velocity.magnitude < maxSpeed / 2)
+                {
+                    momentumDirection = Vector3.Lerp(momentumDirection, -subKart.transform.forward, Time.deltaTime / 1.5f);
                     thisRigidbody.velocity = momentumDirection * Time.deltaTime * speed;
                 }
             }
@@ -207,6 +229,12 @@ public class BaseKart : MonoBehaviour
                     {
                         finishLine.FinishRace(PhotonNetwork.player);
                         StopDetectingSurroundings();
+                    }
+
+                    var checkpoint = collision.GetComponent<Checkpoint>();
+                    if (checkpoint != null && collision.isTrigger)
+                    {
+                        RegisterCheckpoint(transform.position, transform.rotation);
                     }
                 }
                 yield return null;

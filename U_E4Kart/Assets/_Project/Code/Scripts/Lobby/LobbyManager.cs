@@ -250,7 +250,8 @@ public class LobbyManager : PunBehaviour
             var roomList = PhotonNetwork.GetRoomList();
             foreach (var room in roomList)
             {
-                if (!(bool) room.CustomProperties[RaceController.CustomProperty_RaceStarted])
+                var raceStartedPropertyObject = room.CustomProperties[RaceController.CustomProperty_RaceStarted];
+                if (raceStartedPropertyObject == null || !(bool) raceStartedPropertyObject)
                 {
                     var newRoom = Instantiate(roomButtonPrefab, roomScrollView.content);
                     newRoom.SetupButton(room.Name, room.PlayerCount, GlobalSettingsData.Instance.maxPlayersPerRoom,

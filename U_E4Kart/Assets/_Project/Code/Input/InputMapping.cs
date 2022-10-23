@@ -55,6 +55,15 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Reverse"",
+                    ""type"": ""Button"",
+                    ""id"": ""118e9c37-fb84-42db-beee-624fac2c4f8b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""OpenMenu"",
                     ""type"": ""Button"",
                     ""id"": ""f5d0c3aa-e238-4d17-8bc4-bd668fd80c1f"",
@@ -381,6 +390,28 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
                     ""action"": ""Stats"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f700f98-0216-40dd-a006-a218695234b6"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reverse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed423d39-acd9-4a77-9fc3-c1ae557627f2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reverse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -392,6 +423,7 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Accelerate = m_Player.FindAction("Accelerate", throwIfNotFound: true);
         m_Player_Brake = m_Player.FindAction("Brake", throwIfNotFound: true);
+        m_Player_Reverse = m_Player.FindAction("Reverse", throwIfNotFound: true);
         m_Player_OpenMenu = m_Player.FindAction("OpenMenu", throwIfNotFound: true);
         m_Player_Stats = m_Player.FindAction("Stats", throwIfNotFound: true);
     }
@@ -456,6 +488,7 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Accelerate;
     private readonly InputAction m_Player_Brake;
+    private readonly InputAction m_Player_Reverse;
     private readonly InputAction m_Player_OpenMenu;
     private readonly InputAction m_Player_Stats;
     public struct PlayerActions
@@ -465,6 +498,7 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Accelerate => m_Wrapper.m_Player_Accelerate;
         public InputAction @Brake => m_Wrapper.m_Player_Brake;
+        public InputAction @Reverse => m_Wrapper.m_Player_Reverse;
         public InputAction @OpenMenu => m_Wrapper.m_Player_OpenMenu;
         public InputAction @Stats => m_Wrapper.m_Player_Stats;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -485,6 +519,9 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
                 @Brake.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
                 @Brake.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
                 @Brake.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrake;
+                @Reverse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReverse;
+                @Reverse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReverse;
+                @Reverse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReverse;
                 @OpenMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenMenu;
                 @OpenMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenMenu;
                 @OpenMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnOpenMenu;
@@ -504,6 +541,9 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
                 @Brake.started += instance.OnBrake;
                 @Brake.performed += instance.OnBrake;
                 @Brake.canceled += instance.OnBrake;
+                @Reverse.started += instance.OnReverse;
+                @Reverse.performed += instance.OnReverse;
+                @Reverse.canceled += instance.OnReverse;
                 @OpenMenu.started += instance.OnOpenMenu;
                 @OpenMenu.performed += instance.OnOpenMenu;
                 @OpenMenu.canceled += instance.OnOpenMenu;
@@ -519,6 +559,7 @@ public partial class @InputMapping : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnAccelerate(InputAction.CallbackContext context);
         void OnBrake(InputAction.CallbackContext context);
+        void OnReverse(InputAction.CallbackContext context);
         void OnOpenMenu(InputAction.CallbackContext context);
         void OnStats(InputAction.CallbackContext context);
     }
