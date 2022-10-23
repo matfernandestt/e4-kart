@@ -1,25 +1,40 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class ConnectedPlayersGrid : MonoBehaviour
 {
-    [SerializeField] private AgentSelectionPlayer[] players;
-
-    private void Awake()
-    {
-        players = GetComponentsInChildren<AgentSelectionPlayer>();
-    }
+    [SerializeField] private Transform playersParent;
+    [SerializeField] private AgentSelectionPlayer characterSelectionPlayerPrefab;
+    
+    private List<AgentSelectionPlayer> players = new List<AgentSelectionPlayer>();
+    private bool firstTime;
 
     public void SetPlayers()
     {
-        foreach (var player in players) { player.SetNoPlayer(); }
-        
         var connectedPlayers = PhotonNetwork.playerList;
+        if (!firstTime)
+        {
+            var previousList = GetComponentsInChildren<AgentSelectionPlayer>();
+            foreach (var player in previousList)
+            {
+                Destroy(player.gameObject);
+            }
+            foreach (var player in connectedPlayers)
+            {
+                var newCharSelectPlayer = Instantiate(characterSelectionPlayerPrefab, playersParent);
+                newCharSelectPlayer.SetNoPlayer();
+                players.Add(newCharSelectPlayer);
+            }
+
+            firstTime = true;
+        }
+
         var playerList = connectedPlayers.ToList();
         for (var i = 0; i < playerList.Count; i++)
         {
             var p = playerList[i];
-            if (i < players.Length)
+            if (i < players.Count)
             {
                 var agentId = PlayerData.GetCustomProperty(p, "selectedAgent");
                 if (agentId != null)

@@ -13,6 +13,7 @@ public class RaceController : PunBehaviour
     public static Action onStartRace;
     public static Action onFinishRace;
     
+    public const string CustomProperty_RaceStarted = "raceStarted";
     public const string CustomProperty_RaceWinner = "raceWinner";
 
     private void Awake()

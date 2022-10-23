@@ -40,9 +40,6 @@ public class LobbyManager : PunBehaviour
     [SerializeField] private RoomButton roomButtonPrefab;
     [SerializeField] private GameObject roomSelectionBlocker;
 
-    [Header("Room")]
-    [SerializeField] private byte maxPlayersInRooms;
-
     [Header("Audio")]
     [SerializeField] private AudioClip menusBGM;
     
@@ -212,7 +209,7 @@ public class LobbyManager : PunBehaviour
         
         var options = new RoomOptions
         {
-            MaxPlayers = maxPlayersInRooms
+            MaxPlayers = GlobalSettingsData.Instance.maxPlayersPerRoom,
         };
         PhotonNetwork.CreateRoom($"{PhotonNetwork.player.NickName}'s room", options, null);
         MatchInstance.NewMatch();
@@ -253,16 +250,19 @@ public class LobbyManager : PunBehaviour
             var roomList = PhotonNetwork.GetRoomList();
             foreach (var room in roomList)
             {
-                var newRoom = Instantiate(roomButtonPrefab, roomScrollView.content);
-                newRoom.SetupButton(room.Name, room.PlayerCount, maxPlayersInRooms, 
-                    () =>
-                    {
-                        MatchInstance.NewMatch();
-                        UpdatePlayerTeam();
-                        PhotonNetwork.JoinRoom(room.Name);
-                        roomScreen.EnableSelectMapButton(false);
-                        roomSelectionBlocker.SetActive(true);
-                    });
+                if (!(bool) room.CustomProperties[RaceController.CustomProperty_RaceStarted])
+                {
+                    var newRoom = Instantiate(roomButtonPrefab, roomScrollView.content);
+                    newRoom.SetupButton(room.Name, room.PlayerCount, GlobalSettingsData.Instance.maxPlayersPerRoom,
+                        () =>
+                        {
+                            MatchInstance.NewMatch();
+                            UpdatePlayerTeam();
+                            PhotonNetwork.JoinRoom(room.Name);
+                            roomScreen.EnableSelectMapButton(false);
+                            roomSelectionBlocker.SetActive(true);
+                        });
+                }
             }
             yield return new WaitForSeconds(1f);
         }

@@ -12,14 +12,14 @@ public class BgmManager : MonoBehaviour
         {
             i = this;
             DontDestroyOnLoad(gameObject);
+            
+            GlobalSettingsData.Instance.Set_BGM_Volume(GlobalSettingsData.Instance.Get_BGM_Volume());
+            GlobalSettingsData.Instance.Set_SFX_Volume(GlobalSettingsData.Instance.Get_SFX_Volume());
         }
         else
         {
             Destroy(gameObject);
         }
-        
-        GlobalSettingsData.Instance.Set_BGM_Volume(GlobalSettingsData.Instance.savedBgmVolume);
-        GlobalSettingsData.Instance.Set_SFX_Volume(GlobalSettingsData.Instance.savedSfxVolume);
     }
 
     public static void PlayBGM(AudioClip clip)

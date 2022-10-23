@@ -14,6 +14,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Scoreboard scoreboard;
     [SerializeField] private Button leaveMatchButton;
+    [SerializeField] private Button endMatchButton;
     
     [SerializeField] private TextMeshProUGUI pingText;
 
@@ -28,9 +29,9 @@ public class SettingsMenu : MonoBehaviour
         
         if(leaveMatchButton != null)
             leaveMatchButton.onClick.AddListener(LeaveMatch);
+        if(endMatchButton != null)
+            endMatchButton.onClick.AddListener(LeaveMatch);
         
-        bgmVolumeSlider.value = GlobalSettingsData.Instance.savedBgmVolume;
-        bgmVolumeSlider.value = GlobalSettingsData.Instance.savedSfxVolume;
         bgmVolumeSlider.onValueChanged.AddListener(OnChangeVolumeBGM);
         sfxVolumeSlider.onValueChanged.AddListener(OnChangeVolumeSFX);
 
@@ -38,6 +39,7 @@ public class SettingsMenu : MonoBehaviour
         mapping.Player.Stats.performed += OpenStats;
         mapping.Player.Stats.canceled += CloseStats;
 
+        pingToggle.isOn = GlobalSettingsData.Instance.loadedSave.save.showPing;
         pingText.gameObject.SetActive(pingToggle.isOn);
         scoreboard.gameObject.SetActive(false);
         
@@ -58,23 +60,32 @@ public class SettingsMenu : MonoBehaviour
 
     private void OpenSettings(bool enable)
     {
+        RefreshSliderValues();
+        
         settingsMenu.SetActive(enable);
         onLockInputs?.Invoke(enable);
 
         if (!enable)
         {
             pingText.gameObject.SetActive(pingToggle.isOn);
+            SaveSystem.Save();
         }
+    }
+
+    private void RefreshSliderValues()
+    {
+        bgmVolumeSlider.value = GlobalSettingsData.Instance.Get_BGM_Volume();
+        sfxVolumeSlider.value = GlobalSettingsData.Instance.Get_SFX_Volume();
     }
 
     private void OnChangeVolumeBGM(float value)
     {
-        GlobalSettingsData.Instance.Set_BGM_Volume(value);
+        GlobalSettingsData.Instance.Set_BGM_Volume(bgmVolumeSlider.value);
     }
     
     private void OnChangeVolumeSFX(float value)
     {
-        GlobalSettingsData.Instance.Set_SFX_Volume(value);
+        GlobalSettingsData.Instance.Set_SFX_Volume(sfxVolumeSlider.value);
     }
 
     private void OpenStats(InputAction.CallbackContext context)
@@ -95,6 +106,7 @@ public class SettingsMenu : MonoBehaviour
     private void LeaveMatch()
     {
         leaveMatchButton.interactable = false;
+        endMatchButton.interactable = false;
         PhotonNetwork.LeaveRoom();
 
         StartCoroutine(WaitToChangeScene());

@@ -9,18 +9,17 @@ public class MapSelectionScreen : MonoBehaviour
 
     private void Awake()
     {
+        foreach (var button in closeMapSelectionButton)
+        {
+            button.onClick.AddListener(CloseMenu);
+        }
+        
         RefreshMapSelectionScreen();
     }
 
     public void RefreshMapSelectionScreen()
     {
         selectableMaps ??= GetComponentsInChildren<SelectableMap>(true);
-
-        foreach (var button in closeMapSelectionButton)
-        {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(CloseMenu);
-        }
 
         foreach (var selectableMap in selectableMaps)
         {

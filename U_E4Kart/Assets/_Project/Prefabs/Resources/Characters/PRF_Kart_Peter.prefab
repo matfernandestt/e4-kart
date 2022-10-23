@@ -100,10 +100,20 @@ PrefabInstance:
       propertyPath: instantiationId
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 3383593368032640847, guid: c8abc0920c49ea54f99c6568a2b6a3cc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c7ec57a6abcd34443a6688e4d1066071, type: 2}
+    - target: {fileID: 5583647552483790845, guid: c8abc0920c49ea54f99c6568a2b6a3cc,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5939004603568013214, guid: c8abc0920c49ea54f99c6568a2b6a3cc,
         type: 3}
       propertyPath: m_Name
-      value: PRF_Kart_Peter Variant
+      value: PRF_Kart_Peter
       objectReference: {fileID: 0}
     - target: {fileID: 5939004603568013215, guid: c8abc0920c49ea54f99c6568a2b6a3cc,
         type: 3}
@@ -169,6 +179,11 @@ PrefabInstance:
         type: 3}
       propertyPath: instantiationId
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178734542858086170, guid: c8abc0920c49ea54f99c6568a2b6a3cc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8abc0920c49ea54f99c6568a2b6a3cc, type: 3}

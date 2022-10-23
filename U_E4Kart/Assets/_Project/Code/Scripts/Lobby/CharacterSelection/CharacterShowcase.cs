@@ -20,13 +20,13 @@ public class CharacterShowcase : MonoBehaviour
         }
     }
 
-    public void UpdateCharacter(GameObject newCharacter)
+    public void UpdateCharacter(KartVisualController newCharacter)
     {
         RemoveCharacterFromSlot();
         
         if (newCharacter != null)
         {
-            Instantiate(newCharacter, characterSlot);
+            Instantiate(newCharacter.gameObject, characterSlot);
         }
     }
 

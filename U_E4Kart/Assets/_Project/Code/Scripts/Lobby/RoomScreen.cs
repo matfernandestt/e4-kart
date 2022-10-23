@@ -130,6 +130,7 @@ public class RoomScreen : PunBehaviour
         if (MatchInstance.CurrentMatch.playerIsLeader)
         {
             photonView.RPC("StartMatch", PhotonTargets.Others);
+            RaceController.SetCustomProperty(RaceController.CustomProperty_RaceStarted, true);
         }
         
         StartCoroutine(Transition());

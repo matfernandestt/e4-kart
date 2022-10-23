@@ -11,7 +11,6 @@ public class CharacterSelection : PunBehaviour
     [SerializeField] private Button confirmAgentButton;
     [SerializeField] private TextMeshProUGUI confirmCharacterButtonText;
     [SerializeField] private GameObject agentSelectionBlocker;
-    [SerializeField] private Pool_SFX sfxPool;
 
     [SerializeField] private ConnectedPlayersGrid connectedPlayersGrid;
     [SerializeField] private Timer startMatchTimer;
@@ -87,10 +86,10 @@ public class CharacterSelection : PunBehaviour
 
     private void SelectSecretCharacter(CharacterData characterData)
     {
-        var src = sfxPool.GetInstance(Vector3.zero);
+        var src = Pool_SFX.Instance.GetInstance(Vector3.zero);
         src.clip = secretUnlock;
         src.Play();
-        sfxPool.ReturnInstanceWhenConcludePlaying(src);
+        Pool_SFX.Instance.ReturnInstanceWhenConcludePlaying(src);
         
         onSelectSecretCharacter = null;
         agentSelectionPlayer.SetAgent(characterData);
@@ -102,10 +101,10 @@ public class CharacterSelection : PunBehaviour
 
     private void OnConfirmAgent()
     {
-        var src = sfxPool.GetInstance(Vector3.zero);
+        var src = Pool_SFX.Instance.GetInstance(Vector3.zero);
         src.clip = localSelectedCharacter.sfx_OnSelectCharacter;
         src.Play();
-        sfxPool.ReturnInstanceWhenConcludePlaying(src);
+        Pool_SFX.Instance.ReturnInstanceWhenConcludePlaying(src);
         
         confirmCharacterButtonText.text = "Waiting for match to start";
         characterShowcase.EndShowcase();

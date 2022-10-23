@@ -4,10 +4,10 @@ using UnityEngine;
 public class BaseSubKart : MonoBehaviour
 {
     [SerializeField] private Transform collider;
-    [SerializeField] private GameObject visuals;
+    [SerializeField] private KartVisualController visuals;
 
     public Transform GetColliderTransform => collider;
-    public GameObject GetVisuals => visuals;
+    public KartVisualController GetVisuals => visuals;
     
     public void UpdateRotation(Vector3 axisInput)
     {

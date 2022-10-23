@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94744ba0712e2cf45a6a96aed25ebb40, type: 3}
   m_Name: GlobalSettings
   m_EditorClassIdentifier: 
+  loadedSave: {fileID: 11400000, guid: 4cdb7b0f3a81c414e8e228130bdadc6d, type: 2}
+  maxPlayersPerRoom: 12
   agentSelectionTime: 5
   localPlayerData: {fileID: 11400000, guid: 46c1be56885afe9498f8d6292afebd9c, type: 2}
   cameraPositionOffset: {x: 0, y: 0, z: 0}
   cameraRotationOffset: {x: 0, y: 0, z: 0}
   cameraFollowDelay: 10
-  savedBgmVolume: -25
-  savedSfxVolume: 0
   bgmMixer: {fileID: 24100000, guid: a30bb9c38fda9f94aaf155ea28aa61e8, type: 2}
   sfxMixer: {fileID: 24100000, guid: 642a1a4c872ebbd4e814d2cc70f89685, type: 2}
   chosenMap: {fileID: 11400000, guid: dda10b6b453037a41a5793a5f30f6160, type: 2}
