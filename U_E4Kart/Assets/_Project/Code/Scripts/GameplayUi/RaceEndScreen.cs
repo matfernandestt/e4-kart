@@ -6,6 +6,8 @@ public class RaceEndScreen : MonoBehaviour
 {
     [SerializeField] private GameObject panel;
     [SerializeField] private TextMeshProUGUI winnerText;
+    [SerializeField] private AudioClip winBgm;
+    [SerializeField] private AudioClip loseBgm;
 
     private void Awake()
     {
@@ -24,6 +26,10 @@ public class RaceEndScreen : MonoBehaviour
         panel.SetActive(true);
 
         var winner = RaceController.GetCustomProperty(RaceController.CustomProperty_RaceWinner);
-        winnerText.text = $"CONGRATULATION!\n THE WINNER IS {(string)winner}";
+        var isWinner = (string) winner == PhotonNetwork.player.NickName;
+        var color = isWinner ? Color.green : Color.red;
+        var parsedColor = ColorUtility.ToHtmlStringRGB(color);
+        winnerText.text = $"CONGRATULATIONS!\nTHE WINNER IS\n<color=#{parsedColor}>{(string)winner}</color>";
+        BgmManager.PlayBGM(isWinner ? winBgm : loseBgm);
     }
 }

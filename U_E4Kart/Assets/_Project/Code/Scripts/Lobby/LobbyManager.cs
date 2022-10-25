@@ -156,6 +156,8 @@ public class LobbyManager : PunBehaviour
         PhotonNetwork.playerName = nicknameInputField.text;
         playerData.nickname = nicknameInputField.text;
         welcomeBackTitle.text = $"Welcome back, {playerData.nickname}!";
+        GlobalSettingsData.Instance.loadedSave.save.nickname = playerData.nickname;
+        SaveSystem.Save();
 
         PhotonNetwork.ConnectUsingSettings("v1.0");
     }

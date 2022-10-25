@@ -8,5 +8,6 @@ public class Initializer : MonoBehaviour
         SaveSystem.Load();
         GlobalSettingsData.Instance.Set_BGM_Volume(GlobalSettingsData.Instance.loadedSave.save.Volume_BGM);
         GlobalSettingsData.Instance.Set_SFX_Volume(GlobalSettingsData.Instance.loadedSave.save.Volume_SFX);
+        GlobalSettingsData.Instance.localPlayerData.nickname = GlobalSettingsData.Instance.loadedSave.save.nickname;
     }
 }

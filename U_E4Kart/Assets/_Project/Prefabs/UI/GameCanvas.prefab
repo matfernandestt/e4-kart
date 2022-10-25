@@ -2034,6 +2034,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panel: {fileID: 5162417555818222827}
   winnerText: {fileID: 90163798}
+  winBgm: {fileID: 8300000, guid: 46ae7743ee8f9bc4f87a60b94cf54e59, type: 3}
+  loseBgm: {fileID: 8300000, guid: 61856014218c34248853cd0c3de6caf1, type: 3}
 --- !u!1 &2122789702
 GameObject:
   m_ObjectHideFlags: 0
@@ -3517,6 +3519,7 @@ MonoBehaviour:
   scoreboard: {fileID: 2024712587}
   leaveMatchButton: {fileID: 3295505382315294473}
   endMatchButton: {fileID: 1489723580}
+  quitGameButton: {fileID: 0}
   pingText: {fileID: 255817089}
 --- !u!114 &2559571166836348642
 MonoBehaviour:

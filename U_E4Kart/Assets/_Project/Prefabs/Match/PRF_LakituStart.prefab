@@ -413,6 +413,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393dad304d8271b46af7f0806aba5e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beep: {fileID: 8300000, guid: 4bcf9f8f8ad6c3b43974557b07c109f2, type: 3}
+  startRace: {fileID: 8300000, guid: a5049ae9cd5777a47a1760306d9c401e, type: 3}
 --- !u!1 &5466552395832845709
 GameObject:
   m_ObjectHideFlags: 0

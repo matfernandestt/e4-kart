@@ -15,6 +15,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Scoreboard scoreboard;
     [SerializeField] private Button leaveMatchButton;
     [SerializeField] private Button endMatchButton;
+    [SerializeField] private Button quitGameButton;
     
     [SerializeField] private TextMeshProUGUI pingText;
 
@@ -31,6 +32,8 @@ public class SettingsMenu : MonoBehaviour
             leaveMatchButton.onClick.AddListener(LeaveMatch);
         if(endMatchButton != null)
             endMatchButton.onClick.AddListener(LeaveMatch);
+        if(quitGameButton != null)
+            quitGameButton.onClick.AddListener(QuitGame);
         
         bgmVolumeSlider.onValueChanged.AddListener(OnChangeVolumeBGM);
         sfxVolumeSlider.onValueChanged.AddListener(OnChangeVolumeSFX);
@@ -58,7 +61,7 @@ public class SettingsMenu : MonoBehaviour
         OpenSettings(!settingsMenu.activeSelf);
     }
 
-    private void OpenSettings(bool enable)
+    public void OpenSettings(bool enable)
     {
         RefreshSliderValues();
         
@@ -117,6 +120,11 @@ public class SettingsMenu : MonoBehaviour
             yield return new WaitWhile(() => Transitioner.IsTransitioning);
             SceneManager.LoadScene("SCN_Lobby");
         }
+    }
+
+    private void QuitGame()
+    {
+        Application.Quit();
     }
 
     private void Update()

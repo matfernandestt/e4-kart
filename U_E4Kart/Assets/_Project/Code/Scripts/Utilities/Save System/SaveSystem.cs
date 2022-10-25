@@ -44,6 +44,7 @@ public class SaveSystem
 [Serializable]
 public class Save
 {
+    public string nickname;
     public float Volume_BGM = -20f;
     public float Volume_SFX = -20f;
     public bool showPing = true;

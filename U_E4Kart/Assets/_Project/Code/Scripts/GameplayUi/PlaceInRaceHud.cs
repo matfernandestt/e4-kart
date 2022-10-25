@@ -14,7 +14,7 @@ public class PlaceInRaceHud : MonoBehaviour
     [SerializeField] private TextMeshProUGUI placeNumber;
     [SerializeField] private TextMeshProUGUI placeText;
 
-    private GameObject[] players = Array.Empty<GameObject>();
+    private PlayerKart[] players = Array.Empty<PlayerKart>();
     private Transform finishLine;
     private Transform myKart;
 
@@ -34,7 +34,7 @@ public class PlaceInRaceHud : MonoBehaviour
     private void OnStartRace()
     {
         if (!PhotonNetwork.connected) return;
-        players = GameObject.FindGameObjectsWithTag("Player");
+        players = FindObjectsOfType<PlayerKart>();
         finishLine = FindObjectOfType<FinishLine>().transform;
         myKart = FindObjectOfType<BaseKart>().transform;
     }
