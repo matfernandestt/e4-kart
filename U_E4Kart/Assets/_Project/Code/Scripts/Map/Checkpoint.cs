@@ -5,7 +5,7 @@ public class Checkpoint : MonoBehaviour
 {
     public void FixPosition()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out var hit, 10f))
+        if (Physics.Raycast(transform.position, Vector3.down, out var hit, 100f))
         {
             var road = hit.collider.GetComponent<Road>();
             if (road != null)

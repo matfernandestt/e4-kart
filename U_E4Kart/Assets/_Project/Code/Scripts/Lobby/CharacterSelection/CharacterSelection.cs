@@ -80,7 +80,7 @@ public class CharacterSelection : PunBehaviour
         agentSelectionPlayer.SetAgent(characterData);
         localSelectedCharacter = characterData;
         
-        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals);
+        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals, characterData.characterName);
     }
 
     private void SelectSecretCharacter(CharacterData characterData)
@@ -93,7 +93,7 @@ public class CharacterSelection : PunBehaviour
         onSelectSecretCharacter = null;
         agentSelectionPlayer.SetAgent(characterData);
         localSelectedCharacter = characterData;
-        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals);
+        characterShowcase.UpdateCharacter(characterData.characterPrefab.subKart.GetVisuals, characterData.characterName);
         
         OnConfirmAgent();
     }

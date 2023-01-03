@@ -81,6 +81,7 @@ public class RaceController : PunBehaviour
     
     public static void SetCustomProperty(string customPropertyName, object value)
     {
+        if (!PhotonNetwork.connected) return;
         var room = PhotonNetwork.room;
         if (room.CustomProperties.ContainsKey(customPropertyName))
         {
@@ -93,7 +94,10 @@ public class RaceController : PunBehaviour
     }
     
     public static object GetCustomProperty(string customPropertyName)
-    { 
-        return PhotonNetwork.room.CustomProperties[customPropertyName];
+    {
+        if (PhotonNetwork.connected)
+            return PhotonNetwork.room.CustomProperties[customPropertyName];
+        else
+            return null;
     }
 }

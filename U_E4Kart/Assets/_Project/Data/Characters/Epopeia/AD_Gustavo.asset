@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded819b3b5a261541832f67826ce3906, type: 3}
+  m_Name: AD_Gustavo
+  m_EditorClassIdentifier: 
+  characterIcon: {fileID: 21300000, guid: 3b5ca1e585cc4fc4d89a2f11063fb7a8, type: 3}
+  characterName: Gustavo
+  characterPrefab: {fileID: 158913782686942005, guid: ba6c2040b084fb34880d2632f26bccdf,
+    type: 3}
+  sfx_OnSelectCharacter: {fileID: 0}

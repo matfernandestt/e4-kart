@@ -10,14 +10,17 @@ public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private Toggle pingToggle;
+    [SerializeField] private Toggle fpsToggle;
     [SerializeField] private Slider bgmVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Scoreboard scoreboard;
+    [SerializeField] private Button closePopupButton;
     [SerializeField] private Button leaveMatchButton;
     [SerializeField] private Button endMatchButton;
     [SerializeField] private Button quitGameButton;
     
     [SerializeField] private TextMeshProUGUI pingText;
+    [SerializeField] private TextMeshProUGUI fpsText;
 
     private InputMapping mapping;
 
@@ -41,9 +44,17 @@ public class SettingsMenu : MonoBehaviour
         mapping.Player.OpenMenu.performed += PerformOpenMenu;
         mapping.Player.Stats.performed += OpenStats;
         mapping.Player.Stats.canceled += CloseStats;
+        
+        closePopupButton.onClick.AddListener(() => OpenSettings(false));
 
         pingToggle.isOn = GlobalSettingsData.Instance.loadedSave.save.showPing;
         pingText.gameObject.SetActive(pingToggle.isOn);
+        if (fpsToggle != null)
+        {
+            fpsToggle.isOn = GlobalSettingsData.Instance.loadedSave.save.showFPS;
+            fpsText.gameObject.SetActive(fpsToggle.isOn);
+        }
+
         scoreboard.gameObject.SetActive(false);
         
         scoreboard.InitializeScoreboard(PhotonNetwork.connected ? PhotonNetwork.playerList : null);
@@ -72,6 +83,12 @@ public class SettingsMenu : MonoBehaviour
         {
             pingText.gameObject.SetActive(pingToggle.isOn);
             GlobalSettingsData.Instance.loadedSave.save.showPing = pingToggle.isOn;
+            if (fpsToggle != null)
+            {
+                fpsText.gameObject.SetActive(fpsToggle.isOn);
+                GlobalSettingsData.Instance.loadedSave.save.showFPS = fpsToggle.isOn;
+            }
+
             SaveSystem.Save();
         }
     }
@@ -131,7 +148,14 @@ public class SettingsMenu : MonoBehaviour
     {
         if (PhotonNetwork.connected)
         {
-            pingText.text = $"PING: {PhotonNetwork.GetPing()}ms";
+            if(pingToggle.isOn)
+                pingText.text = $"PING: {PhotonNetwork.GetPing()}ms";
+        }
+        
+        if (fpsToggle != null)
+        {
+            if (fpsToggle.isOn)
+                fpsText.text = $"FPS: {(int) (1 / Time.deltaTime)}";
         }
     }
 }

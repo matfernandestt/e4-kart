@@ -20,4 +20,10 @@ public class SaveSystemEditor
     {
         SaveSystem.DeleteSaveFile();
     }
+    
+    [MenuItem("Save System/Open Save File")]
+    private static void OpenSaveFile()
+    {
+        SaveSystem.Open();
+    }
 }

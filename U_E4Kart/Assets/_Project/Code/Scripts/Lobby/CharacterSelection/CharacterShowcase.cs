@@ -20,13 +20,14 @@ public class CharacterShowcase : MonoBehaviour
         }
     }
 
-    public void UpdateCharacter(KartVisualController newCharacter)
+    public void UpdateCharacter(KartVisualController newCharacter, string nickname)
     {
         RemoveCharacterFromSlot();
         
         if (newCharacter != null)
         {
-            Instantiate(newCharacter.gameObject, characterSlot);
+            var kart = Instantiate(newCharacter, characterSlot);
+           kart.SetFirstLetter(nickname.ToCharArray()[0].ToString());
         }
     }
 

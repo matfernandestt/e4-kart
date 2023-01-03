@@ -11,6 +11,7 @@ public class BaseKart : MonoBehaviour
 {
     public BaseSubKart subKart;
     public CameraFollower myCam;
+    [SerializeField] private AudioSource brakeAudioSource;
 
     public bool isGrounded;
     public bool isAccelerating;
@@ -44,6 +45,8 @@ public class BaseKart : MonoBehaviour
 
         input.Player.Accelerate.performed += StartAccelerating;
         input.Player.Reverse.canceled += StoppedReversing;
+        input.Player.Brake.performed += StartBrake;
+        input.Player.Brake.canceled += StopBrake;
         RaceController.onStartRace += OnStartRace;
 
         momentumDirection = Vector3.zero;
@@ -55,6 +58,8 @@ public class BaseKart : MonoBehaviour
     {
         input.Player.Accelerate.performed -= StartAccelerating;
         input.Player.Reverse.canceled -= StoppedReversing;
+        input.Player.Brake.performed -= StartBrake;
+        input.Player.Brake.canceled -= StopBrake;
         RaceController.onStartRace -= OnStartRace;
     }
 
@@ -117,6 +122,18 @@ public class BaseKart : MonoBehaviour
     private void StoppedReversing(InputAction.CallbackContext context)
     {
         myCam.ForceNormalCamera();
+    }
+    
+    private void StartBrake(InputAction.CallbackContext context)
+    {
+        if (thisRigidbody.velocity.magnitude == 0) return;
+        
+        brakeAudioSource.Play();
+    }
+    
+    private void StopBrake(InputAction.CallbackContext context)
+    {
+        brakeAudioSource.Pause();
     }
 
     private void Update()
@@ -195,6 +212,8 @@ public class BaseKart : MonoBehaviour
 
         if (Mathf.Abs(thisRigidbody.velocity.magnitude) <= 0)
             momentumDirection = Vector3.zero;
+        subKart.GetVisuals.SetIsMoving(thisRigidbody.velocity.magnitude > .2f);
+        Debug.Log(thisRigidbody.velocity.magnitude);
     }
 
     private void StopDetectingSurroundings()
@@ -234,7 +253,7 @@ public class BaseKart : MonoBehaviour
                     var checkpoint = collision.GetComponent<Checkpoint>();
                     if (checkpoint != null && collision.isTrigger)
                     {
-                        RegisterCheckpoint(transform.position, transform.rotation);
+                        RegisterCheckpoint(checkpoint.transform.position, transform.rotation);
                     }
                 }
                 yield return null;

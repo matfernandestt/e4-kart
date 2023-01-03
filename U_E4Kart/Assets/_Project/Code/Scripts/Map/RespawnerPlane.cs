@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class RespawnerPlane : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Renderer selfMesh;
+    
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(selfMesh != null)
+        {
+#if UNITY_EDITOR
+            selfMesh.enabled = true;
+            return;
+#endif
+            selfMesh.enabled = false;
+        }
     }
 }

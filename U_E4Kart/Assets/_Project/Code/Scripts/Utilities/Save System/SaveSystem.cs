@@ -11,7 +11,7 @@ public class SaveSystem
     
     public static void DeleteSaveFile()
     {
-        var path = $"{Application.dataPath}/{fileName}.{extension}";
+        var path = $"{Application.persistentDataPath}/{fileName}.{extension}";
 
         if (!File.Exists(path))
         {
@@ -24,7 +24,7 @@ public class SaveSystem
     
     public static void Load()
     {
-        var path = $"{Application.dataPath}/{fileName}.{extension}";
+        var path = $"{Application.persistentDataPath}/{fileName}.{extension}";
 
         if (!File.Exists(path))
         {
@@ -36,8 +36,14 @@ public class SaveSystem
 
     public static void Save()
     {
-        var path = $"{Application.dataPath}/{fileName}.{extension}";
+        var path = $"{Application.persistentDataPath}/{fileName}.{extension}";
         File.WriteAllText(path, JsonUtility.ToJson(GlobalSettingsData.Instance.loadedSave.save));
+    }
+    
+    public static void Open()
+    {
+        var path = $"{Application.persistentDataPath}/{fileName}.{extension}";
+        System.Diagnostics.Process.Start("C:/Windows/notepad.exe", path);
     }
 }
 
@@ -48,4 +54,5 @@ public class Save
     public float Volume_BGM = -20f;
     public float Volume_SFX = -20f;
     public bool showPing = true;
+    public bool showFPS = true;
 }

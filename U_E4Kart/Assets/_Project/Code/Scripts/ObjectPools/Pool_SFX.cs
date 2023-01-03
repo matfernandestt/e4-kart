@@ -83,6 +83,7 @@ public class Pool_SFX : ObjectPoolBase
         returnedObject.gameObject.SetActive(false);
         returnedObject.transform.SetParent(transform);
         returnedObject.transform.localPosition = Vector3.zero;
+        returnedObject.pitch = 1f;
     }
 
     public void ReturnInstanceWhenConcludePlaying(AudioSource instance)

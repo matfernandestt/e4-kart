@@ -29,7 +29,7 @@ public class RaceEndScreen : MonoBehaviour
         var isWinner = (string) winner == PhotonNetwork.player.NickName;
         var color = isWinner ? Color.green : Color.red;
         var parsedColor = ColorUtility.ToHtmlStringRGB(color);
-        winnerText.text = $"CONGRATULATIONS!\nTHE WINNER IS\n<color=#{parsedColor}>{(string)winner}</color>";
+        winnerText.text = $"<color=#{parsedColor}>{(string)winner}</color>";
         BgmManager.PlayBGM(isWinner ? winBgm : loseBgm);
     }
 }

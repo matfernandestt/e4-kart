@@ -25,6 +25,7 @@ public class PlayerRaceIndicator : MonoBehaviour
 
     private void RaceStart()
     {
+        if (!PhotonNetwork.connected) return;
         var playerKart = GetComponentInParent<PlayerKart>();
         if (playerKart != null)
         {

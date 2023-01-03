@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSequence: 00000000000000000100000001000000020000000300000002000000030000000400000005000000
   cheatChecker: 00000000000000000000
-  unlockableCharacter: {fileID: 11400000, guid: 9c5905fa5ee6b0a4b9822f1114ea77f9,
+  unlockableCharacter: {fileID: 11400000, guid: 17159f57f8ea65e45925c8188fc07306,
     type: 2}

@@ -391,7 +391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6846105199650703171
 RectTransform:
   m_ObjectHideFlags: 0
@@ -755,7 +755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6846105200821222930
 RectTransform:
   m_ObjectHideFlags: 0
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: VISIT MY PAGES!
+  m_text: VISIT MY PAGE!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4e4de4b5563a0e54283e7b1564e57224, type: 2}
   m_sharedMaterial: {fileID: 9766765918288003, guid: 4e4de4b5563a0e54283e7b1564e57224,
